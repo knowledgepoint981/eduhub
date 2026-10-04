@@ -6,9 +6,15 @@
 
     <title>EduHub - Student Portal</title>
 
+    <meta name="description"
+          content="EduHub is a student portal for requesting educational notes, MCQs, quizzes, guess papers and other study materials.">
+
+    <meta name="robots" content="index, follow">
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
+
         * {
             box-sizing: border-box;
             margin: 0;
@@ -21,7 +27,10 @@
             color: #222;
         }
 
-        /* NAVBAR */
+        /* =========================
+           NAVIGATION
+        ========================== */
+
         nav {
             background: #0d6efd;
             padding: 15px 25px;
@@ -57,7 +66,11 @@
             background: rgba(255,255,255,0.2);
         }
 
-        /* HERO */
+
+        /* =========================
+           HERO
+        ========================== */
+
         .hero {
             max-width: 1000px;
             margin: 35px auto 20px;
@@ -79,7 +92,11 @@
             opacity: 0.95;
         }
 
-        /* FORM */
+
+        /* =========================
+           MAIN CONTAINER
+        ========================== */
+
         .container {
             max-width: 850px;
             margin: 25px auto 50px;
@@ -93,6 +110,11 @@
             margin-bottom: 22px;
             color: #0d6efd;
         }
+
+
+        /* =========================
+           FORM
+        ========================== */
 
         label {
             display: block;
@@ -111,10 +133,23 @@
             font-size: 15px;
         }
 
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #0d6efd;
+            box-shadow: 0 0 0 2px rgba(13,110,253,0.1);
+        }
+
         textarea {
             min-height: 100px;
             resize: vertical;
         }
+
+
+        /* =========================
+           BUTTON
+        ========================== */
 
         button {
             width: 100%;
@@ -138,7 +173,11 @@
             cursor: not-allowed;
         }
 
-        /* STATUS BUTTON */
+
+        /* =========================
+           STATUS SECTION
+        ========================== */
+
         .status-section {
             margin-top: 30px;
             padding-top: 25px;
@@ -166,7 +205,58 @@
             background: #157347;
         }
 
-        /* MESSAGES */
+
+        /* =========================
+           FOLLOW SECTION
+        ========================== */
+
+        .follow-section {
+            margin-top: 30px;
+            padding: 30px 20px;
+            text-align: center;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .follow-section h2 {
+            color: #0d6efd;
+            margin-bottom: 10px;
+        }
+
+        .follow-section p {
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .follower-count {
+            font-size: 22px;
+            font-weight: bold;
+            margin: 15px 0;
+            color: #198754;
+        }
+
+        .follow-section button {
+            max-width: 300px;
+            margin: 10px auto;
+            display: block;
+            background: #0d6efd;
+        }
+
+        .follow-section button:hover {
+            background: #0b5ed7;
+        }
+
+        .follow-message {
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+
+        /* =========================
+           SUCCESS / ERROR
+        ========================== */
+
         .success {
             display: none;
             margin-top: 20px;
@@ -196,13 +286,24 @@
             text-align: center;
         }
 
+
+        /* =========================
+           FOOTER
+        ========================== */
+
         footer {
             text-align: center;
             padding: 25px;
             color: #777;
         }
 
+
+        /* =========================
+           MOBILE
+        ========================== */
+
         @media (max-width: 600px) {
+
             nav {
                 justify-content: center;
             }
@@ -220,13 +321,24 @@
                 margin: 20px 12px 40px;
                 padding: 20px;
             }
+
+            .nav-links {
+                justify-content: center;
+            }
+
         }
+
     </style>
 </head>
 
+
 <body>
 
-<!-- NAVIGATION -->
+
+<!-- =========================
+     NAVIGATION
+========================== -->
+
 <nav>
 
     <div class="logo">
@@ -234,33 +346,59 @@
     </div>
 
     <div class="nav-links">
-        <a href="index.html" class="active">Submit Request</a>
-        <a href="status.html">Check Status</a>
+
+        <a href="index.html" class="active">
+            Submit Request
+        </a>
+
+        <a href="status.html">
+            Check Status
+        </a>
+
     </div>
 
 </nav>
 
 
-<!-- HERO -->
+
+<!-- =========================
+     HERO
+========================== -->
+
 <section class="hero">
 
-    <h1>Student Request Portal</h1>
+    <h1>
+        Student Request Portal
+    </h1>
 
     <p>
-        Request notes, MCQs, guess papers and other educational materials.
+        Request notes, MCQs, quizzes, guess papers and other educational materials.
     </p>
 
 </section>
 
 
-<!-- REQUEST FORM -->
+
+<!-- =========================
+     REQUEST FORM
+========================== -->
+
 <div class="container">
 
-    <h2>Submit a Material Request</h2>
+    <h2>
+        Submit a Material Request
+    </h2>
+
 
     <form id="requestForm">
 
-        <label for="studentName">Student Name</label>
+
+        <!-- STUDENT NAME -->
+
+        <label for="studentName">
+            Student Name
+        </label>
+
         <input
             type="text"
             id="studentName"
@@ -268,7 +406,14 @@
             placeholder="Enter your name"
         >
 
-        <label for="contact">Contact</label>
+
+
+        <!-- CONTACT -->
+
+        <label for="contact">
+            Contact
+        </label>
+
         <input
             type="text"
             id="contact"
@@ -276,17 +421,50 @@
             placeholder="Phone number or email"
         >
 
-        <label for="class">Class</label>
+
+
+        <!-- CLASS -->
+
+        <label for="class">
+            Class
+        </label>
+
         <select id="class" required>
-            <option value="">Select Class</option>
-            <option value="9th">9th</option>
-            <option value="10th">10th</option>
-            <option value="11th">11th</option>
-            <option value="12th">12th</option>
-            <option value="Other">Other</option>
+
+            <option value="">
+                Select Class
+            </option>
+
+            <option value="9th">
+                9th
+            </option>
+
+            <option value="10th">
+                10th
+            </option>
+
+            <option value="11th">
+                11th
+            </option>
+
+            <option value="12th">
+                12th
+            </option>
+
+            <option value="Other">
+                Other
+            </option>
+
         </select>
 
-        <label for="subject">Subject</label>
+
+
+        <!-- SUBJECT -->
+
+        <label for="subject">
+            Subject
+        </label>
+
         <input
             type="text"
             id="subject"
@@ -294,7 +472,14 @@
             placeholder="e.g. Biology"
         >
 
-        <label for="chapter">Chapter / Topic</label>
+
+
+        <!-- CHAPTER -->
+
+        <label for="chapter">
+            Chapter / Topic
+        </label>
+
         <input
             type="text"
             id="chapter"
@@ -302,43 +487,99 @@
             placeholder="e.g. Chapter 1 - Biomolecules"
         >
 
-        <label for="material">Material Required</label>
+
+
+        <!-- MATERIAL -->
+
+        <label for="material">
+            Material Required
+        </label>
+
         <select id="material" required>
-            <option value="">Select Material</option>
-            <option value="Notes">Notes</option>
-            <option value="MCQs">MCQs</option>
-            <option value="Quiz">Quiz</option>
-            <option value="Guess Paper">Guess Paper</option>
-            <option value="Other">Other</option>
+
+            <option value="">
+                Select Material
+            </option>
+
+            <option value="Notes">
+                Notes
+            </option>
+
+            <option value="MCQs">
+                MCQs
+            </option>
+
+            <option value="Quiz">
+                Quiz
+            </option>
+
+            <option value="Guess Paper">
+                Guess Paper
+            </option>
+
+            <option value="Other">
+                Other
+            </option>
+
         </select>
 
-        <label for="message">Additional Details</label>
+
+
+        <!-- MESSAGE -->
+
+        <label for="message">
+            Additional Details
+        </label>
+
         <textarea
             id="message"
             placeholder="Write any additional requirements..."
         ></textarea>
 
-        <button type="submit" id="submitBtn">
+
+
+        <!-- SUBMIT -->
+
+        <button
+            type="submit"
+            id="submitBtn"
+        >
             Submit Request
         </button>
 
     </form>
 
 
-    <!-- SUCCESS -->
-    <div id="successBox" class="success">
 
-        <strong>Request Submitted Successfully!</strong>
+    <!-- =========================
+         SUCCESS BOX
+    ========================== -->
+
+    <div
+        id="successBox"
+        class="success"
+    >
+
+        <strong>
+            Request Submitted Successfully!
+        </strong>
 
         <p style="margin-top:8px;">
-            Please save your Request ID. You will need it to check your status.
+            Please save your Request ID.
+            You will need it to check your status.
         </p>
 
-        <div class="request-code" id="requestCode"></div>
+
+        <div
+            class="request-code"
+            id="requestCode"
+        ></div>
+
 
         <p style="margin-top:12px;">
             You can check your request anytime using the button below.
         </p>
+
 
         <a
             href="status.html"
@@ -351,171 +592,312 @@
     </div>
 
 
-    <!-- ERROR -->
-    <div id="errorBox" class="error"></div>
+
+    <!-- =========================
+         ERROR BOX
+    ========================== -->
+
+    <div
+        id="errorBox"
+        class="error"
+    ></div>
 
 
-    <!-- STATUS SECTION -->
+
+    <!-- =========================
+         CHECK STATUS
+    ========================== -->
+
     <div class="status-section">
 
         <p>
             Already submitted a request?
         </p>
 
-        <a href="status.html" class="status-btn">
+        <a
+            href="status.html"
+            class="status-btn"
+        >
             🔎 Check Your Request Status
         </a>
+
+    </div>
+
+
+
+    <!-- =========================
+         FOLLOW EDUHUB
+    ========================== -->
+
+    <div class="follow-section">
+
+        <h2>
+            ⭐ Follow EduHub
+        </h2>
+
+        <p>
+            Follow EduHub to stay connected and get access
+            to new study materials.
+        </p>
+
+
+        <div class="follower-count">
+
+            👥
+            <span id="followerCount">
+                0
+            </span>
+            Followers
+
+        </div>
+
+
+        <button
+            id="followBtn"
+            onclick="followEduHub()"
+        >
+            ⭐ Follow EduHub
+        </button>
+
+
+        <p
+            id="followMessage"
+            class="follow-message"
+        ></p>
 
     </div>
 
 </div>
 
 
+
+<!-- =========================
+     FOOTER
+========================== -->
+
 <footer>
+
     © 2026 EduHub — Student Material Request Portal
+
 </footer>
+
 
 
 <script>
 
-    /* SUPABASE CONFIGURATION */
 
-    const SUPABASE_URL =
-        "https://koheruqspqwvoaovhxkb.supabase.co";
+/* =====================================================
+   SUPABASE CONFIGURATION
+===================================================== */
 
-    const SUPABASE_KEY =
-        "sb_publishable_ER3AShJ0cie9WLYBNHak4g_m3KUTLg7";
-
-    const supabaseClient =
-        window.supabase.createClient(
-            SUPABASE_URL,
-            SUPABASE_KEY
-        );
+const SUPABASE_URL =
+    "https://koheruqspqwvoaovhxkb.supabase.co";
 
 
-    /* GENERATE REQUEST ID */
+const SUPABASE_KEY =
+    "sb_publishable_ER3AShJ0cie9WLYBNHak4g_m3KUTLg7";
 
-    function generateRequestCode() {
 
-        const characters =
-            "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
 
-        let code = "";
 
-        for (let i = 0; i < 6; i++) {
 
-            const randomIndex =
-                Math.floor(
-                    Math.random() * characters.length
-                );
+/* =====================================================
+   GENERATE REQUEST ID
+===================================================== */
 
-            code += characters[randomIndex];
+function generateRequestCode() {
 
-        }
+    const characters =
+        "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
 
-        return "EDU-" + code;
+    let code = "";
+
+
+    for (let i = 0; i < 6; i++) {
+
+        const randomIndex =
+            Math.floor(
+                Math.random() * characters.length
+            );
+
+        code += characters[randomIndex];
+
     }
 
 
-    /* FORM SUBMISSION */
+    return "EDU-" + code;
+}
 
-    document
-        .getElementById("requestForm")
-        .addEventListener("submit", async function(event) {
+
+
+/* =====================================================
+   REQUEST FORM SUBMISSION
+===================================================== */
+
+document
+    .getElementById("requestForm")
+    .addEventListener(
+        "submit",
+        async function(event) {
 
             event.preventDefault();
 
+
             const submitBtn =
-                document.getElementById("submitBtn");
+                document.getElementById(
+                    "submitBtn"
+                );
+
 
             const successBox =
-                document.getElementById("successBox");
+                document.getElementById(
+                    "successBox"
+                );
+
 
             const errorBox =
-                document.getElementById("errorBox");
+                document.getElementById(
+                    "errorBox"
+                );
 
-            successBox.style.display = "none";
-            errorBox.style.display = "none";
 
-            submitBtn.disabled = true;
-            submitBtn.textContent = "Submitting...";
+            successBox.style.display =
+                "none";
+
+
+            errorBox.style.display =
+                "none";
+
+
+            submitBtn.disabled =
+                true;
+
+
+            submitBtn.textContent =
+                "Submitting...";
 
 
             const requestCode =
                 generateRequestCode();
 
 
+
             const requestData = {
 
                 student_name:
                     document
-                        .getElementById("studentName")
+                        .getElementById(
+                            "studentName"
+                        )
                         .value
                         .trim(),
+
 
                 contact:
                     document
-                        .getElementById("contact")
+                        .getElementById(
+                            "contact"
+                        )
                         .value
                         .trim(),
+
 
                 class:
                     document
-                        .getElementById("class")
+                        .getElementById(
+                            "class"
+                        )
                         .value,
+
 
                 subject:
                     document
-                        .getElementById("subject")
+                        .getElementById(
+                            "subject"
+                        )
                         .value
                         .trim(),
+
 
                 chapter:
                     document
-                        .getElementById("chapter")
+                        .getElementById(
+                            "chapter"
+                        )
                         .value
                         .trim(),
+
 
                 material:
                     document
-                        .getElementById("material")
+                        .getElementById(
+                            "material"
+                        )
                         .value,
+
 
                 message:
                     document
-                        .getElementById("message")
+                        .getElementById(
+                            "message"
+                        )
                         .value
                         .trim(),
 
-                status: "Pending",
 
-                request_code: requestCode
+                status:
+                    "Pending",
+
+
+                request_code:
+                    requestCode
 
             };
 
 
+
             try {
 
+
+                /* 10 SECOND TIMEOUT */
+
                 const timeoutPromise =
-                    new Promise((_, reject) => {
+                    new Promise(
+                        (_, reject) => {
 
-                        setTimeout(() => {
+                            setTimeout(
+                                () => {
 
-                            reject(
-                                new Error(
-                                    "Request timed out. Please try again."
-                                )
+                                    reject(
+                                        new Error(
+                                            "Request timed out. Please try again."
+                                        )
+                                    );
+
+                                },
+                                10000
                             );
 
-                        }, 10000);
+                        }
+                    );
 
-                    });
 
+
+                /* INSERT REQUEST */
 
                 const insertPromise =
                     supabaseClient
                         .from("requests")
-                        .insert([requestData]);
+                        .insert([
+                            requestData
+                        ]);
+
+
 
 
                 const { error } =
@@ -525,48 +907,265 @@
                     ]);
 
 
+
                 if (error) {
+
                     throw error;
+
                 }
 
 
-                document
-                    .getElementById("requestCode")
-                    .textContent = requestCode;
 
-
-                successBox.style.display = "block";
+                /* SHOW REQUEST ID */
 
                 document
-                    .getElementById("requestForm")
+                    .getElementById(
+                        "requestCode"
+                    )
+                    .textContent =
+                    requestCode;
+
+
+
+                successBox.style.display =
+                    "block";
+
+
+
+                /* RESET FORM */
+
+                document
+                    .getElementById(
+                        "requestForm"
+                    )
                     .reset();
 
 
-                submitBtn.disabled = false;
-                submitBtn.textContent = "Submit Request";
 
+                submitBtn.disabled =
+                    false;
+
+
+                submitBtn.textContent =
+                    "Submit Request";
+
+
+
+                /* SCROLL TO SUCCESS */
 
                 window.scrollTo({
-                    top: successBox.offsetTop - 30,
-                    behavior: "smooth"
+
+                    top:
+                        successBox.offsetTop - 30,
+
+                    behavior:
+                        "smooth"
+
                 });
 
 
-            } catch (error) {
 
-                console.error(error);
+            }
+            catch (error) {
+
+
+                console.error(
+                    "Submission error:",
+                    error
+                );
+
 
                 errorBox.textContent =
                     "Unable to submit your request. Please try again.";
 
-                errorBox.style.display = "block";
 
-                submitBtn.disabled = false;
-                submitBtn.textContent = "Submit Request";
+                errorBox.style.display =
+                    "block";
+
+
+                submitBtn.disabled =
+                    false;
+
+
+                submitBtn.textContent =
+                    "Submit Request";
 
             }
 
-        });
+        }
+    );
+
+
+
+/* =====================================================
+   FOLLOW SYSTEM
+===================================================== */
+
+const FOLLOWER_STORAGE_KEY =
+    "eduhub_follower_id";
+
+
+
+/* GET OR CREATE BROWSER FOLLOWER ID */
+
+function getFollowerId() {
+
+    let followerId =
+        localStorage.getItem(
+            FOLLOWER_STORAGE_KEY
+        );
+
+
+    if (!followerId) {
+
+        followerId =
+            crypto.randomUUID();
+
+
+        localStorage.setItem(
+            FOLLOWER_STORAGE_KEY,
+            followerId
+        );
+
+    }
+
+
+    return followerId;
+}
+
+
+
+/* =====================================================
+   LOAD FOLLOWER COUNT
+===================================================== */
+
+async function loadFollowerCount() {
+
+
+    const { data, error } =
+        await supabaseClient
+            .rpc(
+                "get_follower_count"
+            );
+
+
+
+    if (error) {
+
+        console.error(
+            "Unable to load follower count:",
+            error
+        );
+
+        return;
+
+    }
+
+
+
+    document
+        .getElementById(
+            "followerCount"
+        )
+        .textContent =
+        data ?? 0;
+
+}
+
+
+
+/* =====================================================
+   FOLLOW EDUHUB
+===================================================== */
+
+async function followEduHub() {
+
+
+    const button =
+        document.getElementById(
+            "followBtn"
+        );
+
+
+    const message =
+        document.getElementById(
+            "followMessage"
+        );
+
+
+    button.disabled =
+        true;
+
+
+    button.textContent =
+        "Following...";
+
+
+    const followerId =
+        getFollowerId();
+
+
+
+    const { error } =
+        await supabaseClient
+            .rpc(
+                "follow_eduhub",
+                {
+                    p_follower_id:
+                        followerId
+                }
+            );
+
+
+
+    if (error) {
+
+
+        console.error(
+            "Follow error:",
+            error
+        );
+
+
+        message.textContent =
+            "Unable to follow right now. Please try again.";
+
+
+        button.disabled =
+            false;
+
+
+        button.textContent =
+            "⭐ Follow EduHub";
+
+
+        return;
+
+    }
+
+
+
+    /* SUCCESS */
+
+    button.textContent =
+        "✓ Following EduHub";
+
+
+    message.textContent =
+        "Thank you for following EduHub!";
+
+
+    await loadFollowerCount();
+
+}
+
+
+
+/* =====================================================
+   LOAD FOLLOWERS WHEN PAGE OPENS
+===================================================== */
+
+loadFollowerCount();
 
 </script>
 
