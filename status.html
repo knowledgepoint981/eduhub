@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>EduHub - Check Request Status</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #eff6ff, #f8fafc);
+            color: #1e293b;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1d4ed8, #2563eb);
+            color: white;
+            text-align: center;
+            padding: 35px 20px;
+        }
+
+        header h1 {
+            font-size: 36px;
+            margin-bottom: 8px;
+        }
+
+        header p {
+            font-size: 17px;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 18px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        h2 {
+            color: #1e3a8a;
+            margin-bottom: 8px;
+        }
+
+        .intro {
+            color: #64748b;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 7px;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 9px;
+            font-size: 16px;
+            text-transform: uppercase;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #2563eb;
+        }
+
+        .check-btn {
+            width: 100%;
+            margin-top: 18px;
+            padding: 14px;
+            border: none;
+            border-radius: 9px;
+            background: #2563eb;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .check-btn:hover {
+            background: #1d4ed8;
+        }
+
+        .check-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        /* RESULT */
+
+        #resultBox {
+            display: none;
+            margin-top: 30px;
+            padding: 25px;
+            border-radius: 15px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+        }
+
+        .request-number {
+            text-align: center;
+            font-size: 22px;
+            font-weight: bold;
+            color: #1d4ed8;
+            letter-spacing: 2px;
+            margin-bottom: 25px;
+        }
+
+        .status-card {
+            text-align: center;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .status-icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        .status-title {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .status-description {
+            color: #475569;
+            line-height: 1.5;
+        }
+
+        /* STATUS COLORS */
+
+        .pending {
+            background: #fef3c7;
+            border: 1px solid #fbbf24;
+        }
+
+        .pending .status-title {
+            color: #92400e;
+        }
+
+        .progress {
+            background: #dbeafe;
+            border: 1px solid #60a5fa;
+        }
+
+        .progress .status-title {
+            color: #1d4ed8;
+        }
+
+        .completed {
+            background: #dcfce7;
+            border: 1px solid #4ade80;
+        }
+
+        .completed .status-title {
+            color: #166534;
+        }
+
+        .unknown {
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+        }
+
+        .unknown .status-title {
+            color: #475569;
+        }
+
+        /* ADMIN MESSAGE */
+
+        .message-box {
+            margin-top: 20px;
+            padding: 18px;
+            background: white;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+        }
+
+        .message-box h3 {
+            color: #1e3a8a;
+            margin-bottom: 8px;
+        }
+
+        .message-box p {
+            color: #475569;
+            line-height: 1.6;
+        }
+
+        /* MATERIAL */
+
+        .material-box {
+            margin-top: 20px;
+            padding: 20px;
+            background: #ecfdf5;
+            border: 1px solid #86efac;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .material-box h3 {
+            color: #166534;
+            margin-bottom: 12px;
+        }
+
+        .material-btn {
+            display: inline-block;
+            padding: 12px 22px;
+            background: #16a34a;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .material-btn:hover {
+            background: #15803d;
+        }
+
+        /* ERROR */
+
+        #errorBox {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 25px;
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #64748b;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<header>
+
+    <h1>EduHub</h1>
+
+    <p>Check Your Request Status</p>
+
+</header>
+
+
+<div class="container">
+
+    <div class="card">
+
+        <h2>Request Status</h2>
+
+        <p class="intro">
+            Enter the Request ID you received after submitting your study
+            material request.
+        </p>
+
+
+        <label for="requestCode">
+            Request ID
+        </label>
+
+        <input
+            type="text"
+            id="requestCode"
+            placeholder="e.g. EDU-X7K4P2"
+            maxlength="10"
+            autocomplete="off"
+        >
+
+
+        <button
+            class="check-btn"
+            id="checkBtn"
+        >
+            Check Status
+        </button>
+
+
+        <!-- ERROR -->
+
+        <div id="errorBox"></div>
+
+
+        <!-- RESULT -->
+
+        <div id="resultBox">
+
+            <div
+                class="request-number"
+                id="displayRequestCode"
+            >
+            </div>
+
+
+            <div
+                class="status-card"
+                id="statusCard"
+            >
+
+                <div
+                    class="status-icon"
+                    id="statusIcon"
+                >
+                </div>
+
+                <div
+                    class="status-title"
+                    id="statusTitle"
+                >
+                </div>
+
+                <div
+                    class="status-description"
+                    id="statusDescription"
+                >
+                </div>
+
+            </div>
+
+
+            <!-- ADMIN MESSAGE -->
+
+            <div
+                class="message-box"
+                id="messageBox"
+                style="display:none;"
+            >
+
+                <h3>
+                    Message from EduHub
+                </h3>
+
+                <p id="adminMessage"></p>
+
+            </div>
+
+
+            <!-- MATERIAL -->
+
+            <div
+                class="material-box"
+                id="materialBox"
+                style="display:none;"
+            >
+
+                <h3>
+                    📚 Your Material is Ready!
+                </h3>
+
+                <a
+                    id="materialLink"
+                    class="material-btn"
+                    href="#"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    Open Study Material
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <a
+            href="index.html"
+            class="back-link"
+        >
+            ← Submit Another Request
+        </a>
+
+    </div>
+
+</div>
+
+
+<footer>
+
+    EduHub © 2026
+
+</footer>
+
+
+<script>
+
+
+/* =========================================
+   SUPABASE CONFIGURATION
+========================================= */
+
+
+const SUPABASE_URL =
+    "https://koheruqspqwvoaovhxkb.supabase.co";
+
+
+const SUPABASE_KEY =
+    "sb_publishable_ER3AShJ0cie9WLYBNHak4g_m3KUTLg7";
+
+
+const supabaseClient =
+    supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+/* =========================================
+   ELEMENTS
+========================================= */
+
+
+const requestCodeInput =
+    document.getElementById("requestCode");
+
+
+const checkBtn =
+    document.getElementById("checkBtn");
+
+
+const resultBox =
+    document.getElementById("resultBox");
+
+
+const errorBox =
+    document.getElementById("errorBox");
+
+
+const displayRequestCode =
+    document.getElementById("displayRequestCode");
+
+
+const statusCard =
+    document.getElementById("statusCard");
+
+
+const statusIcon =
+    document.getElementById("statusIcon");
+
+
+const statusTitle =
+    document.getElementById("statusTitle");
+
+
+const statusDescription =
+    document.getElementById("statusDescription");
+
+
+const messageBox =
+    document.getElementById("messageBox");
+
+
+const adminMessage =
+    document.getElementById("adminMessage");
+
+
+const materialBox =
+    document.getElementById("materialBox");
+
+
+const materialLink =
+    document.getElementById("materialLink");
+
+
+/* =========================================
+   CHECK STATUS
+========================================= */
+
+
+checkBtn.addEventListener(
+    "click",
+    async function() {
+
+
+        errorBox.style.display = "none";
+
+        resultBox.style.display = "none";
+
+        messageBox.style.display = "none";
+
+        materialBox.style.display = "none";
+
+
+        let code =
+            requestCodeInput.value
+                .trim()
+                .toUpperCase();
+
+
+        if (!code) {
+
+            showError(
+                "Please enter your Request ID."
+            );
+
+            return;
+
+        }
+
+
+        checkBtn.disabled = true;
+
+        checkBtn.textContent =
+            "Checking...";
+
+
+        try {
+
+
+            const { data, error } =
+                await supabaseClient
+                    .rpc(
+                        "check_request_status",
+                        {
+                            p_request_code: code
+                        }
+                    );
+
+
+            console.log(
+                "Status response:",
+                data,
+                error
+            );
+
+
+            if (error) {
+
+                throw error;
+
+            }
+
+
+            if (!data || data.length === 0) {
+
+                showError(
+                    "Request ID not found. Please check the ID and try again."
+                );
+
+                return;
+
+            }
+
+
+            const request =
+                data[0];
+
+
+            /* =================================
+               DISPLAY REQUEST ID
+            ================================= */
+
+
+            displayRequestCode.textContent =
+                request.request_code;
+
+
+            /* =================================
+               STATUS
+            ================================= */
+
+
+            const status =
+                String(request.status || "")
+                    .toLowerCase();
+
+
+            statusCard.className =
+                "status-card";
+
+
+            if (status === "pending") {
+
+
+                statusCard.classList.add(
+                    "pending"
+                );
+
+
+                statusIcon.textContent =
+                    "🟡";
+
+
+                statusTitle.textContent =
+                    "Pending";
+
+
+                statusDescription.textContent =
+                    "Your request has been received and is waiting to be processed.";
+
+            }
+
+
+            else if (
+                status === "in progress"
+                ||
+                status === "in_progress"
+            ) {
+
+
+                statusCard.classList.add(
+                    "progress"
+                );
+
+
+                statusIcon.textContent =
+                    "🔵";
+
+
+                statusTitle.textContent =
+                    "In Progress";
+
+
+                statusDescription.textContent =
+                    "Your requested study material is currently being prepared.";
+
+            }
+
+
+            else if (
+                status === "completed"
+            ) {
+
+
+                statusCard.classList.add(
+                    "completed"
+                );
+
+
+                statusIcon.textContent =
+                    "🟢";
+
+
+                statusTitle.textContent =
+                    "Completed";
+
+
+                statusDescription.textContent =
+                    "Your request has been completed. Your study material is ready.";
+
+            }
+
+
+            else {
+
+
+                statusCard.classList.add(
+                    "unknown"
+                );
+
+
+                statusIcon.textContent =
+                    "ℹ️";
+
+
+                statusTitle.textContent =
+                    request.status || "Unknown";
+
+
+                statusDescription.textContent =
+                    "Your request has been received.";
+
+            }
+
+
+            /* =================================
+               ADMIN MESSAGE
+            ================================= */
+
+
+            if (
+                request.admin_message
+                &&
+                request.admin_message.trim() !== ""
+            ) {
+
+                adminMessage.textContent =
+                    request.admin_message;
+
+                messageBox.style.display =
+                    "block";
+
+            }
+
+
+            /* =================================
+               MATERIAL LINK
+            ================================= */
+
+
+            if (
+                request.material_link
+                &&
+                request.material_link.trim() !== ""
+            ) {
+
+                materialLink.href =
+                    request.material_link;
+
+                materialBox.style.display =
+                    "block";
+
+            }
+
+
+            resultBox.style.display =
+                "block";
+
+
+            resultBox.scrollIntoView({
+
+                behavior: "smooth",
+
+                block: "center"
+
+            });
+
+
+        }
+
+
+        catch (error) {
+
+
+            console.error(
+                "STATUS ERROR:",
+                error
+            );
+
+
+            showError(
+                "Could not check status: "
+                + error.message
+            );
+
+        }
+
+
+        finally {
+
+            checkBtn.disabled =
+                false;
+
+            checkBtn.textContent =
+                "Check Status";
+
+        }
+
+    }
+);
+
+
+/* =========================================
+   ERROR FUNCTION
+========================================= */
+
+
+function showError(message) {
+
+    errorBox.textContent =
+        message;
+
+    errorBox.style.display =
+        "block";
+
+}
+
+
+/* =========================================
+   ENTER KEY
+========================================= */
+
+
+requestCodeInput.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (event.key === "Enter") {
+
+            event.preventDefault();
+
+            checkBtn.click();
+
+        }
+
+    }
+);
+
+
+</script>
+
+
+</body>
+
+</html>

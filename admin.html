@@ -1,0 +1,1520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>EduHub Admin Dashboard</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1d4ed8, #2563eb);
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin-bottom: 6px;
+        }
+
+        header p {
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        /* LOGIN */
+
+        #loginSection {
+            max-width: 450px;
+            margin: 50px auto;
+        }
+
+        #loginSection h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            margin-top: 7px;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 75px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        button {
+            border: none;
+            border-radius: 8px;
+            padding: 11px 18px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .login-btn {
+            width: 100%;
+            background: #2563eb;
+            color: white;
+        }
+
+        .login-btn:hover {
+            background: #1d4ed8;
+        }
+
+        .logout-btn {
+            background: #dc2626;
+            color: white;
+        }
+
+        .logout-btn:hover {
+            background: #b91c1c;
+        }
+
+        .message {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .error {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .success {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        /* DASHBOARD */
+
+        #dashboardSection {
+            display: none;
+        }
+
+        .dashboard-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .dashboard-top h2 {
+            color: #1e3a8a;
+        }
+
+        .controls {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .controls input,
+        .controls select {
+            margin: 0;
+        }
+
+        .stats {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .stat-box {
+            background: #eff6ff;
+            border-radius: 10px;
+            padding: 15px 25px;
+            min-width: 150px;
+        }
+
+        .stat-box strong {
+            display: block;
+            font-size: 25px;
+            color: #2563eb;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1650px;
+        }
+
+        th {
+            background: #1e40af;
+            color: white;
+            padding: 13px;
+            text-align: left;
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #e2e8f0;
+            vertical-align: top;
+        }
+
+        tr:hover {
+            background: #f8fafc;
+        }
+
+        .status-select {
+            width: 145px;
+            margin: 0 0 8px 0;
+            padding: 8px;
+            font-weight: bold;
+        }
+
+        .status-select.pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-select.progress {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .status-select.completed {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .admin-message-input {
+            width: 230px;
+            min-height: 75px;
+            margin: 0 0 8px 0;
+        }
+
+        .material-link-input {
+            width: 230px;
+            margin: 0 0 8px 0;
+        }
+
+        .save-status-btn {
+            background: #2563eb;
+            color: white;
+            padding: 8px 14px;
+            font-size: 12px;
+            width: 100%;
+        }
+
+        .save-status-btn:hover {
+            background: #1d4ed8;
+        }
+
+        .save-status-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .admin-controls-title {
+            font-size: 12px;
+            font-weight: bold;
+            color: #475569;
+            margin-bottom: 5px;
+        }
+
+        .request-code {
+            display: inline-block;
+            background: #e0f2fe;
+            color: #0369a1;
+            padding: 5px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .existing-link {
+            display: block;
+            font-size: 12px;
+            margin-top: 4px;
+            color: #2563eb;
+            text-decoration: none;
+            word-break: break-all;
+        }
+
+        .existing-link:hover {
+            text-decoration: underline;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 40px;
+            color: #64748b;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #64748b;
+        }
+
+        @media (max-width: 800px) {
+
+            .controls {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 0 10px;
+            }
+
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>EduHub Admin Dashboard</h1>
+    <p>Manage Student Material Requests</p>
+</header>
+
+
+<!-- LOGIN -->
+
+<div class="container" id="loginSection">
+
+    <div class="card">
+
+        <h2>Admin Login</h2>
+
+        <form id="loginForm">
+
+            <label for="email">Admin Email</label>
+
+            <input
+                type="email"
+                id="email"
+                placeholder="Enter admin email"
+                required
+            >
+
+            <label for="password">Password</label>
+
+            <input
+                type="password"
+                id="password"
+                placeholder="Enter admin password"
+                required
+            >
+
+            <button type="submit" class="login-btn">
+                Login
+            </button>
+
+        </form>
+
+        <div id="loginMessage" class="message"></div>
+
+    </div>
+
+</div>
+
+
+<!-- DASHBOARD -->
+
+<div class="container" id="dashboardSection">
+
+    <div class="card">
+
+        <div class="dashboard-top">
+
+            <div>
+                <h2>Student Requests</h2>
+                <p>Manage requests submitted through EduHub.</p>
+            </div>
+
+            <button id="logoutBtn" class="logout-btn">
+                Logout
+            </button>
+
+        </div>
+
+
+        <!-- STATISTICS -->
+
+        <div class="stats">
+
+            <div class="stat-box">
+                <strong id="totalRequests">0</strong>
+                Total Requests
+            </div>
+
+            <div class="stat-box">
+                <strong id="pendingRequests">0</strong>
+                Pending
+            </div>
+
+            <div class="stat-box">
+                <strong id="progressRequests">0</strong>
+                In Progress
+            </div>
+
+            <div class="stat-box">
+                <strong id="completedRequests">0</strong>
+                Completed
+            </div>
+
+        </div>
+
+
+        <!-- SEARCH -->
+
+        <div class="controls">
+
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="Search student, subject, chapter..."
+            >
+
+            <select id="classFilter">
+
+                <option value="">All Classes</option>
+                <option value="9th">9th</option>
+                <option value="10th">10th</option>
+                <option value="11th">11th</option>
+                <option value="12th">12th</option>
+                <option value="Other">Other</option>
+
+            </select>
+
+            <select id="subjectFilter">
+
+                <option value="">All Subjects</option>
+                <option value="Biology">Biology</option>
+                <option value="Chemistry">Chemistry</option>
+                <option value="Physics">Physics</option>
+                <option value="English">English</option>
+                <option value="Urdu">Urdu</option>
+                <option value="Mathematics">Mathematics</option>
+                <option value="Computer Science">Computer Science</option>
+                <option value="Islamiat">Islamiat</option>
+                <option value="Other">Other</option>
+
+            </select>
+
+        </div>
+
+
+        <!-- TABLE -->
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Student</th>
+                        <th>Contact</th>
+                        <th>Class</th>
+                        <th>Subject</th>
+                        <th>Chapter / Topic</th>
+                        <th>Material</th>
+                        <th>Student Details</th>
+                        <th>Admin Response</th>
+                        <th>Status</th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="requestsTableBody"></tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<footer>
+    EduHub © 2026
+</footer>
+
+
+<script>
+
+    /* ==============================
+       SUPABASE CONFIGURATION
+    ============================== */
+
+    const SUPABASE_URL =
+        "https://koheruqspqwvoaovhxkb.supabase.co";
+
+    const SUPABASE_KEY =
+        "sb_publishable_ER3AShJ0cie9WLYBNHak4g_m3KUTLg7";
+
+    const ADMIN_UID =
+        "4938b3aa-8b3e-4dc9-82f9-be3a72fb207a";
+
+
+    const supabaseClient =
+        supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_KEY
+        );
+
+
+    /* ==============================
+       ELEMENTS
+    ============================== */
+
+    const loginSection =
+        document.getElementById("loginSection");
+
+    const dashboardSection =
+        document.getElementById("dashboardSection");
+
+    const loginForm =
+        document.getElementById("loginForm");
+
+    const loginMessage =
+        document.getElementById("loginMessage");
+
+    const logoutBtn =
+        document.getElementById("logoutBtn");
+
+    const tableBody =
+        document.getElementById("requestsTableBody");
+
+    const searchInput =
+        document.getElementById("searchInput");
+
+    const classFilter =
+        document.getElementById("classFilter");
+
+    const subjectFilter =
+        document.getElementById("subjectFilter");
+
+    const totalRequests =
+        document.getElementById("totalRequests");
+
+    const pendingRequests =
+        document.getElementById("pendingRequests");
+
+    const progressRequests =
+        document.getElementById("progressRequests");
+
+    const completedRequests =
+        document.getElementById("completedRequests");
+
+
+    let allRequests = [];
+
+
+    /* ==============================
+       LOGIN MESSAGE
+    ============================== */
+
+    function showLoginMessage(message, type) {
+
+        loginMessage.textContent = message;
+
+        loginMessage.className =
+            "message " + type;
+
+        loginMessage.style.display =
+            "block";
+
+    }
+
+
+    /* ==============================
+       ESCAPE HTML
+    ============================== */
+
+    function escapeHTML(value) {
+
+        if (
+            value === null ||
+            value === undefined
+        ) {
+            return "";
+        }
+
+        return String(value)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+
+    }
+
+
+    /* ==============================
+       SHOW DASHBOARD
+    ============================== */
+
+    function showDashboard() {
+
+        loginSection.style.display =
+            "none";
+
+        dashboardSection.style.display =
+            "block";
+
+        loadRequests();
+
+    }
+
+
+    /* ==============================
+       LOGIN
+    ============================== */
+
+    loginForm.addEventListener(
+        "submit",
+        async function(event) {
+
+            event.preventDefault();
+
+            const email =
+                document
+                    .getElementById("email")
+                    .value
+                    .trim();
+
+            const password =
+                document
+                    .getElementById("password")
+                    .value;
+
+
+            showLoginMessage(
+                "Logging in...",
+                "success"
+            );
+
+
+            const { data, error } =
+                await supabaseClient.auth
+                    .signInWithPassword({
+
+                        email: email,
+                        password: password
+
+                    });
+
+
+            if (error) {
+
+                showLoginMessage(
+                    error.message,
+                    "error"
+                );
+
+                return;
+
+            }
+
+
+            if (!data.user) {
+
+                showLoginMessage(
+                    "Login failed.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+
+            if (
+                data.user.id !== ADMIN_UID
+            ) {
+
+                await supabaseClient
+                    .auth
+                    .signOut();
+
+
+                showLoginMessage(
+                    "Access denied. This account is not authorized.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+
+            showDashboard();
+
+        }
+    );
+
+
+    /* ==============================
+       LOAD REQUESTS
+    ============================== */
+
+    async function loadRequests() {
+
+        tableBody.innerHTML =
+            `<tr>
+                <td colspan="9" class="empty">
+                    Loading requests...
+                </td>
+            </tr>`;
+
+
+        /*
+         IMPORTANT:
+         Do NOT use .order("created_at")
+         because the current requests table
+         does not rely on that column.
+        */
+
+        const { data, error } =
+            await supabaseClient
+                .from("requests")
+                .select("*");
+
+
+        if (error) {
+
+            console.error(
+                "Load requests error:",
+                error
+            );
+
+
+            tableBody.innerHTML =
+                `<tr>
+                    <td colspan="9" class="empty">
+                        Unable to load requests.
+                        <br><br>
+                        <small>
+                            ${escapeHTML(error.message)}
+                        </small>
+                    </td>
+                </tr>`;
+
+            return;
+
+        }
+
+
+        allRequests =
+            data || [];
+
+
+        updateStatistics();
+
+        renderRequests();
+
+    }
+
+
+    /* ==============================
+       STATISTICS
+    ============================== */
+
+    function updateStatistics() {
+
+        totalRequests.textContent =
+            allRequests.length;
+
+
+        pendingRequests.textContent =
+            allRequests.filter(
+                r =>
+                    String(r.status)
+                        .toLowerCase()
+                    === "pending"
+            ).length;
+
+
+        progressRequests.textContent =
+            allRequests.filter(
+                r =>
+                    String(r.status)
+                        .toLowerCase()
+                    === "in progress"
+            ).length;
+
+
+        completedRequests.textContent =
+            allRequests.filter(
+                r =>
+                    String(r.status)
+                        .toLowerCase()
+                    === "completed"
+            ).length;
+
+    }
+
+
+    /* ==============================
+       STATUS CLASS
+    ============================== */
+
+    function getStatusClass(status) {
+
+        const value =
+            String(status)
+                .toLowerCase();
+
+
+        if (value === "completed") {
+            return "completed";
+        }
+
+
+        if (value === "in progress") {
+            return "progress";
+        }
+
+
+        return "pending";
+
+    }
+
+
+    /* ==============================
+       RENDER REQUESTS
+    ============================== */
+
+    function renderRequests() {
+
+        const search =
+            searchInput.value
+                .toLowerCase()
+                .trim();
+
+
+        const selectedClass =
+            classFilter.value;
+
+
+        const selectedSubject =
+            subjectFilter.value;
+
+
+        const filtered =
+            allRequests.filter(
+                request => {
+
+                    const searchableText = [
+
+                        request.request_code,
+                        request.student_name,
+                        request.contact,
+                        request.class,
+                        request.subject,
+                        request.chapter,
+                        request.material,
+                        request.message,
+                        request.status,
+                        request.admin_message,
+                        request.material_link
+
+                    ]
+                    .join(" ")
+                    .toLowerCase();
+
+
+                    const matchesSearch =
+                        !search ||
+                        searchableText
+                            .includes(search);
+
+
+                    const matchesClass =
+                        !selectedClass ||
+                        request.class ===
+                            selectedClass;
+
+
+                    const matchesSubject =
+                        !selectedSubject ||
+                        request.subject ===
+                            selectedSubject;
+
+
+                    return (
+                        matchesSearch &&
+                        matchesClass &&
+                        matchesSubject
+                    );
+
+                }
+            );
+
+
+        if (filtered.length === 0) {
+
+            tableBody.innerHTML =
+                `<tr>
+                    <td colspan="9" class="empty">
+                        No requests found.
+                    </td>
+                </tr>`;
+
+            return;
+
+        }
+
+
+        tableBody.innerHTML =
+            filtered.map(
+                request => {
+
+                    const status =
+                        request.status ||
+                        "Pending";
+
+
+                    const statusClass =
+                        getStatusClass(
+                            status
+                        );
+
+
+                    return `
+
+                        <tr>
+
+                            <!-- STUDENT -->
+
+                            <td>
+
+                                ${
+                                    request.request_code
+                                    ?
+                                    `
+                                    <span class="request-code">
+                                        ${escapeHTML(
+                                            request.request_code
+                                        )}
+                                    </span>
+                                    `
+                                    :
+                                    ""
+                                }
+
+                                <br>
+
+                                <strong>
+                                    ${escapeHTML(
+                                        request.student_name
+                                    )}
+                                </strong>
+
+                            </td>
+
+
+                            <!-- CONTACT -->
+
+                            <td>
+                                ${escapeHTML(
+                                    request.contact
+                                )}
+                            </td>
+
+
+                            <!-- CLASS -->
+
+                            <td>
+                                ${escapeHTML(
+                                    request.class
+                                )}
+                            </td>
+
+
+                            <!-- SUBJECT -->
+
+                            <td>
+                                ${escapeHTML(
+                                    request.subject
+                                )}
+                            </td>
+
+
+                            <!-- CHAPTER -->
+
+                            <td>
+                                ${escapeHTML(
+                                    request.chapter
+                                )}
+                            </td>
+
+
+                            <!-- MATERIAL -->
+
+                            <td>
+                                ${escapeHTML(
+                                    request.material
+                                )}
+                            </td>
+
+
+                            <!-- STUDENT DETAILS -->
+
+                            <td>
+
+                                ${
+                                    request.message
+                                    ?
+                                    escapeHTML(
+                                        request.message
+                                    )
+                                    :
+                                    `
+                                    <span style="
+                                        color:#94a3b8;
+                                    ">
+                                        No additional details
+                                    </span>
+                                    `
+                                }
+
+                            </td>
+
+
+                            <!-- ADMIN RESPONSE -->
+
+                            <td>
+
+                                <div
+                                    class="admin-controls-title"
+                                >
+                                    Admin Message
+                                </div>
+
+
+                                <textarea
+                                    class="admin-message-input"
+                                    data-message-id="${escapeHTML(
+                                        request.id
+                                    )}"
+                                    placeholder="Write a message for the student..."
+                                >${escapeHTML(
+                                    request.admin_message ||
+                                    ""
+                                )}</textarea>
+
+
+                                <div
+                                    class="admin-controls-title"
+                                >
+                                    Material Link
+                                </div>
+
+
+                                <input
+                                    type="url"
+                                    class="material-link-input"
+                                    data-link-id="${escapeHTML(
+                                        request.id
+                                    )}"
+                                    value="${escapeHTML(
+                                        request.material_link ||
+                                        ""
+                                    )}"
+                                    placeholder="https://..."
+                                >
+
+
+                                ${
+                                    request.material_link
+                                    ?
+                                    `
+                                    <a
+                                        class="existing-link"
+                                        href="${escapeHTML(
+                                            request.material_link
+                                        )}"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        🔗 Open current link
+                                    </a>
+                                    `
+                                    :
+                                    ""
+                                }
+
+                            </td>
+
+
+                            <!-- STATUS -->
+
+                            <td>
+
+                                <select
+                                    class="status-select ${statusClass}"
+                                    data-id="${escapeHTML(
+                                        request.id
+                                    )}"
+                                >
+
+                                    <option
+                                        value="Pending"
+                                        ${
+                                            status ===
+                                            "Pending"
+                                            ?
+                                            "selected"
+                                            :
+                                            ""
+                                        }
+                                    >
+                                        Pending
+                                    </option>
+
+
+                                    <option
+                                        value="In Progress"
+                                        ${
+                                            status ===
+                                            "In Progress"
+                                            ?
+                                            "selected"
+                                            :
+                                            ""
+                                        }
+                                    >
+                                        In Progress
+                                    </option>
+
+
+                                    <option
+                                        value="Completed"
+                                        ${
+                                            status ===
+                                            "Completed"
+                                            ?
+                                            "selected"
+                                            :
+                                            ""
+                                        }
+                                    >
+                                        Completed
+                                    </option>
+
+                                </select>
+
+
+                                <button
+                                    class="save-status-btn"
+                                    data-id="${escapeHTML(
+                                        request.id
+                                    )}"
+                                >
+                                    Save Changes
+                                </button>
+
+                            </td>
+
+                        </tr>
+
+                    `;
+
+                }
+            ).join("");
+
+
+        /* ==============================
+           STATUS COLOR
+        ============================== */
+
+        document
+            .querySelectorAll(
+                ".status-select"
+            )
+            .forEach(
+                select => {
+
+                    select.addEventListener(
+                        "change",
+                        function() {
+
+                            this.className =
+                                "status-select " +
+                                getStatusClass(
+                                    this.value
+                                );
+
+                        }
+                    );
+
+                }
+            );
+
+
+        /* ==============================
+           SAVE BUTTONS
+        ============================== */
+
+        document
+            .querySelectorAll(
+                ".save-status-btn"
+            )
+            .forEach(
+                button => {
+
+                    button.addEventListener(
+                        "click",
+                        function() {
+
+                            updateRequest(
+                                this.dataset.id,
+                                this
+                            );
+
+                        }
+                    );
+
+                }
+            );
+
+    }
+
+
+    /* ==============================
+       UPDATE REQUEST
+    ============================== */
+
+    async function updateRequest(
+        id,
+        button
+    ) {
+
+        const select =
+            document.querySelector(
+                `.status-select[data-id="${CSS.escape(id)}"]`
+            );
+
+
+        const messageInput =
+            document.querySelector(
+                `.admin-message-input[data-message-id="${CSS.escape(id)}"]`
+            );
+
+
+        const linkInput =
+            document.querySelector(
+                `.material-link-input[data-link-id="${CSS.escape(id)}"]`
+            );
+
+
+        if (
+            !select ||
+            !messageInput ||
+            !linkInput
+        ) {
+
+            alert(
+                "Could not find the request controls."
+            );
+
+            return;
+
+        }
+
+
+        const newStatus =
+            select.value;
+
+
+        const adminMessage =
+            messageInput.value.trim();
+
+
+        const materialLink =
+            linkInput.value.trim();
+
+
+        /* ==============================
+           LINK VALIDATION
+        ============================== */
+
+        if (
+            materialLink &&
+            !/^https?:\/\/.+/i.test(
+                materialLink
+            )
+        ) {
+
+            alert(
+                "Please enter a valid material link beginning with http:// or https://"
+            );
+
+            linkInput.focus();
+
+            return;
+
+        }
+
+
+        button.disabled =
+            true;
+
+
+        button.textContent =
+            "Saving...";
+
+
+        /* ==============================
+           UPDATE SUPABASE
+        ============================== */
+
+        const { error } =
+            await supabaseClient
+                .from("requests")
+                .update({
+
+                    status:
+                        newStatus,
+
+                    admin_message:
+                        adminMessage ||
+                        null,
+
+                    material_link:
+                        materialLink ||
+                        null
+
+                })
+                .eq(
+                    "id",
+                    id
+                );
+
+
+        if (error) {
+
+            console.error(
+                "Update error:",
+                error
+            );
+
+
+            alert(
+                "Could not save changes:\n\n" +
+                error.message
+            );
+
+
+            button.disabled =
+                false;
+
+
+            button.textContent =
+                "Save Changes";
+
+
+            return;
+
+        }
+
+
+        /* ==============================
+           UPDATE LOCAL DATA
+        ============================== */
+
+        const request =
+            allRequests.find(
+                r =>
+                    String(r.id) ===
+                    String(id)
+            );
+
+
+        if (request) {
+
+            request.status =
+                newStatus;
+
+
+            request.admin_message =
+                adminMessage ||
+                null;
+
+
+            request.material_link =
+                materialLink ||
+                null;
+
+        }
+
+
+        updateStatistics();
+
+
+        button.textContent =
+            "Saved ✓";
+
+
+        setTimeout(
+            () => {
+
+                button.disabled =
+                    false;
+
+                button.textContent =
+                    "Save Changes";
+
+            },
+            1500
+        );
+
+    }
+
+
+    /* ==============================
+       SEARCH
+    ============================== */
+
+    searchInput.addEventListener(
+        "input",
+        renderRequests
+    );
+
+
+    /* ==============================
+       CLASS FILTER
+    ============================== */
+
+    classFilter.addEventListener(
+        "change",
+        renderRequests
+    );
+
+
+    /* ==============================
+       SUBJECT FILTER
+    ============================== */
+
+    subjectFilter.addEventListener(
+        "change",
+        renderRequests
+    );
+
+
+    /* ==============================
+       LOGOUT
+    ============================== */
+
+    logoutBtn.addEventListener(
+        "click",
+        async function() {
+
+            await supabaseClient
+                .auth
+                .signOut();
+
+
+            dashboardSection.style.display =
+                "none";
+
+
+            loginSection.style.display =
+                "block";
+
+
+            loginForm.reset();
+
+
+            showLoginMessage(
+                "You have been logged out.",
+                "success"
+            );
+
+        }
+    );
+
+
+    /* ==============================
+       CHECK SESSION
+    ============================== */
+
+    async function checkSession() {
+
+        const { data } =
+            await supabaseClient
+                .auth
+                .getSession();
+
+
+        const session =
+            data.session;
+
+
+        if (
+            session &&
+            session.user &&
+            session.user.id ===
+                ADMIN_UID
+        ) {
+
+            showDashboard();
+
+        }
+
+    }
+
+
+    checkSession();
+
+</script>
+
+</body>
+</html>
