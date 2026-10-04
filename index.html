@@ -1,454 +1,370 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>EduHub - Student Request Portal</title>
+    <title>EduHub - Student Portal</title>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
-
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: Arial, sans-serif;
         }
 
         body {
-            background: linear-gradient(135deg, #eff6ff, #f8fafc);
-            min-height: 100vh;
-            color: #1e293b;
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #222;
         }
 
-        header {
-            background: linear-gradient(135deg, #1d4ed8, #2563eb);
+        /* NAVBAR */
+        nav {
+            background: #0d6efd;
+            padding: 15px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .logo {
             color: white;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 9px 15px;
+            border-radius: 8px;
+            transition: 0.2s;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            background: rgba(255,255,255,0.2);
+        }
+
+        /* HERO */
+        .hero {
+            max-width: 1000px;
+            margin: 35px auto 20px;
+            padding: 45px 25px;
             text-align: center;
-            padding: 35px 20px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, #0d6efd, #6610f2);
+            color: white;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
         }
 
-        header h1 {
-            font-size: 36px;
-            margin-bottom: 8px;
+        .hero h1 {
+            font-size: 38px;
+            margin-bottom: 10px;
         }
 
-        header p {
+        .hero p {
             font-size: 17px;
-            opacity: 0.9;
+            opacity: 0.95;
         }
 
+        /* FORM */
         .container {
-            max-width: 800px;
-            margin: 35px auto;
-            padding: 0 20px;
-        }
-
-        .card {
-            background: white;
+            max-width: 850px;
+            margin: 25px auto 50px;
             padding: 30px;
+            background: white;
             border-radius: 18px;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
         }
 
-        .card h2 {
-            color: #1e3a8a;
-            margin-bottom: 8px;
-        }
-
-        .intro {
-            color: #64748b;
-            margin-bottom: 25px;
+        .container h2 {
+            margin-bottom: 22px;
+            color: #0d6efd;
         }
 
         label {
             display: block;
-            font-weight: bold;
-            margin-top: 16px;
+            margin-top: 15px;
             margin-bottom: 6px;
+            font-weight: bold;
         }
 
         input,
         select,
         textarea {
             width: 100%;
-            padding: 13px;
-            border: 1px solid #cbd5e1;
-            border-radius: 9px;
+            padding: 12px;
+            border: 1px solid #ccd3dd;
+            border-radius: 8px;
             font-size: 15px;
-            outline: none;
-        }
-
-        input:focus,
-        select:focus,
-        textarea:focus {
-            border-color: #2563eb;
         }
 
         textarea {
-            min-height: 110px;
+            min-height: 100px;
             resize: vertical;
         }
 
-        .submit-btn {
+        button {
             width: 100%;
-            margin-top: 25px;
-            padding: 14px;
+            margin-top: 22px;
+            padding: 13px;
             border: none;
-            border-radius: 9px;
-            background: #2563eb;
+            border-radius: 8px;
+            background: #0d6efd;
             color: white;
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
         }
 
-        .submit-btn:hover {
-            background: #1d4ed8;
+        button:hover {
+            background: #0b5ed7;
         }
 
-        .submit-btn:disabled {
-            opacity: 0.7;
+        button:disabled {
+            background: #8daee0;
             cursor: not-allowed;
         }
 
-        /* SUCCESS */
-
-        #successBox {
-            display: none;
-            margin-top: 25px;
-            padding: 25px;
-            border-radius: 15px;
-            background: #ecfdf5;
-            border: 1px solid #86efac;
+        /* STATUS BUTTON */
+        .status-section {
+            margin-top: 30px;
+            padding-top: 25px;
+            border-top: 1px solid #ddd;
             text-align: center;
         }
 
-        #successBox h3 {
-            color: #166534;
-            margin-bottom: 10px;
+        .status-section p {
+            margin-bottom: 12px;
+            color: #555;
         }
 
-        .request-id {
+        .status-btn {
             display: inline-block;
-            margin: 15px 0;
-            padding: 12px 20px;
-            background: white;
-            border: 2px dashed #2563eb;
-            border-radius: 10px;
-            color: #1d4ed8;
-            font-size: 22px;
-            font-weight: bold;
-            letter-spacing: 2px;
-        }
-
-        .warning {
-            color: #92400e;
-            background: #fef3c7;
-            padding: 12px;
-            border-radius: 8px;
-            margin-top: 10px;
-            font-size: 14px;
-        }
-
-        .status-link {
-            display: inline-block;
-            margin-top: 18px;
-            padding: 12px 20px;
-            background: #1d4ed8;
+            width: 100%;
+            padding: 13px;
+            background: #198754;
             color: white;
             text-decoration: none;
             border-radius: 8px;
             font-weight: bold;
         }
 
-        .status-link:hover {
-            background: #1e40af;
+        .status-btn:hover {
+            background: #157347;
         }
 
-        /* ERROR */
-
-        #errorBox {
+        /* MESSAGES */
+        .success {
             display: none;
             margin-top: 20px;
-            padding: 15px;
+            padding: 18px;
+            background: #d1e7dd;
+            color: #0f5132;
             border-radius: 10px;
-            background: #fee2e2;
-            color: #991b1b;
+        }
+
+        .error {
+            display: none;
+            margin-top: 20px;
+            padding: 18px;
+            background: #f8d7da;
+            color: #842029;
+            border-radius: 10px;
+        }
+
+        .request-code {
+            margin-top: 10px;
+            padding: 12px;
+            background: white;
+            border-radius: 8px;
+            font-size: 20px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            text-align: center;
         }
 
         footer {
             text-align: center;
-            padding: 30px;
-            color: #64748b;
+            padding: 25px;
+            color: #777;
         }
 
+        @media (max-width: 600px) {
+            nav {
+                justify-content: center;
+            }
+
+            .logo {
+                width: 100%;
+                text-align: center;
+            }
+
+            .hero h1 {
+                font-size: 30px;
+            }
+
+            .container {
+                margin: 20px 12px 40px;
+                padding: 20px;
+            }
+        }
     </style>
-
 </head>
-
 
 <body>
 
+<!-- NAVIGATION -->
+<nav>
 
-<header>
+    <div class="logo">
+        📚 EduHub
+    </div>
 
-    <h1>EduHub</h1>
+    <div class="nav-links">
+        <a href="index.html" class="active">Submit Request</a>
+        <a href="status.html">Check Status</a>
+    </div>
 
-    <p>Request the Study Material You Need</p>
-
-</header>
+</nav>
 
 
+<!-- HERO -->
+<section class="hero">
+
+    <h1>Student Request Portal</h1>
+
+    <p>
+        Request notes, MCQs, guess papers and other educational materials.
+    </p>
+
+</section>
+
+
+<!-- REQUEST FORM -->
 <div class="container">
 
-    <div class="card">
+    <h2>Submit a Material Request</h2>
 
-        <h2>Submit a Material Request</h2>
+    <form id="requestForm">
 
-        <p class="intro">
-            Tell us what study material you need and we will process your request.
+        <label for="studentName">Student Name</label>
+        <input
+            type="text"
+            id="studentName"
+            required
+            placeholder="Enter your name"
+        >
+
+        <label for="contact">Contact</label>
+        <input
+            type="text"
+            id="contact"
+            required
+            placeholder="Phone number or email"
+        >
+
+        <label for="class">Class</label>
+        <select id="class" required>
+            <option value="">Select Class</option>
+            <option value="9th">9th</option>
+            <option value="10th">10th</option>
+            <option value="11th">11th</option>
+            <option value="12th">12th</option>
+            <option value="Other">Other</option>
+        </select>
+
+        <label for="subject">Subject</label>
+        <input
+            type="text"
+            id="subject"
+            required
+            placeholder="e.g. Biology"
+        >
+
+        <label for="chapter">Chapter / Topic</label>
+        <input
+            type="text"
+            id="chapter"
+            required
+            placeholder="e.g. Chapter 1 - Biomolecules"
+        >
+
+        <label for="material">Material Required</label>
+        <select id="material" required>
+            <option value="">Select Material</option>
+            <option value="Notes">Notes</option>
+            <option value="MCQs">MCQs</option>
+            <option value="Quiz">Quiz</option>
+            <option value="Guess Paper">Guess Paper</option>
+            <option value="Other">Other</option>
+        </select>
+
+        <label for="message">Additional Details</label>
+        <textarea
+            id="message"
+            placeholder="Write any additional requirements..."
+        ></textarea>
+
+        <button type="submit" id="submitBtn">
+            Submit Request
+        </button>
+
+    </form>
+
+
+    <!-- SUCCESS -->
+    <div id="successBox" class="success">
+
+        <strong>Request Submitted Successfully!</strong>
+
+        <p style="margin-top:8px;">
+            Please save your Request ID. You will need it to check your status.
         </p>
 
+        <div class="request-code" id="requestCode"></div>
 
-        <form id="requestForm">
+        <p style="margin-top:12px;">
+            You can check your request anytime using the button below.
+        </p>
 
+        <a
+            href="status.html"
+            class="status-btn"
+            style="margin-top:10px;"
+        >
+            🔎 Check Request Status
+        </a>
 
-            <!-- STUDENT NAME -->
+    </div>
 
-            <label for="studentName">
-                Student Name
-            </label>
 
-            <input
-                type="text"
-                id="studentName"
-                placeholder="Enter your name"
-                required
-            >
+    <!-- ERROR -->
+    <div id="errorBox" class="error"></div>
 
 
-            <!-- CONTACT -->
+    <!-- STATUS SECTION -->
+    <div class="status-section">
 
-            <label for="contact">
-                Email / WhatsApp
-            </label>
+        <p>
+            Already submitted a request?
+        </p>
 
-            <input
-                type="text"
-                id="contact"
-                placeholder="Enter email or WhatsApp number"
-                required
-            >
-
-
-            <!-- CLASS -->
-
-            <label for="class">
-                Class
-            </label>
-
-            <select id="class" required>
-
-                <option value="">
-                    Select Class
-                </option>
-
-                <option value="9th">
-                    9th Class
-                </option>
-
-                <option value="10th">
-                    10th Class
-                </option>
-
-                <option value="11th">
-                    11th Class
-                </option>
-
-                <option value="12th">
-                    12th Class
-                </option>
-
-                <option value="Other">
-                    Other
-                </option>
-
-            </select>
-
-
-            <!-- SUBJECT -->
-
-            <label for="subject">
-                Subject
-            </label>
-
-            <select id="subject" required>
-
-                <option value="">
-                    Select Subject
-                </option>
-
-                <option value="Biology">
-                    Biology
-                </option>
-
-                <option value="Chemistry">
-                    Chemistry
-                </option>
-
-                <option value="Physics">
-                    Physics
-                </option>
-
-                <option value="English">
-                    English
-                </option>
-
-                <option value="Urdu">
-                    Urdu
-                </option>
-
-                <option value="Mathematics">
-                    Mathematics
-                </option>
-
-                <option value="Computer Science">
-                    Computer Science
-                </option>
-
-                <option value="Islamiat">
-                    Islamiat
-                </option>
-
-                <option value="Other">
-                    Other
-                </option>
-
-            </select>
-
-
-            <!-- CHAPTER -->
-
-            <label for="chapter">
-                Chapter / Topic
-            </label>
-
-            <input
-                type="text"
-                id="chapter"
-                placeholder="e.g. Chapter 1 - Biological Molecules"
-                required
-            >
-
-
-            <!-- MATERIAL -->
-
-            <label for="material">
-                Material Required
-            </label>
-
-            <select id="material" required>
-
-                <option value="">
-                    Select Material
-                </option>
-
-                <option value="Complete Notes">
-                    Complete Notes
-                </option>
-
-                <option value="Short Questions">
-                    Short Questions
-                </option>
-
-                <option value="Long Questions">
-                    Long Questions
-                </option>
-
-                <option value="MCQs">
-                    MCQs
-                </option>
-
-                <option value="Guess Paper">
-                    Guess Paper
-                </option>
-
-                <option value="Other">
-                    Other
-                </option>
-
-            </select>
-
-
-            <!-- MESSAGE -->
-
-            <label for="message">
-                Additional Details
-            </label>
-
-            <textarea
-                id="message"
-                placeholder="Tell us anything else about the material you need..."
-            ></textarea>
-
-
-            <!-- SUBMIT -->
-
-            <button
-                type="submit"
-                class="submit-btn"
-                id="submitBtn"
-            >
-                Submit Request
-            </button>
-
-        </form>
-
-
-        <!-- ERROR -->
-
-        <div id="errorBox"></div>
-
-
-        <!-- SUCCESS -->
-
-        <div id="successBox">
-
-            <h3>
-                ✓ Request Submitted Successfully!
-            </h3>
-
-            <p>
-                Your unique Request ID is:
-            </p>
-
-            <div
-                class="request-id"
-                id="requestCode"
-            >
-            </div>
-
-            <div class="warning">
-
-                ⚠️ Save this Request ID.
-                You will need it to check your request status.
-
-            </div>
-
-            <a
-                href="status.html"
-                class="status-link"
-            >
-                Check Request Status
-            </a>
-
-        </div>
+        <a href="status.html" class="status-btn">
+            🔎 Check Your Request Status
+        </a>
 
     </div>
 
@@ -456,296 +372,203 @@
 
 
 <footer>
-
-    EduHub © 2026
-
+    © 2026 EduHub — Student Material Request Portal
 </footer>
 
 
 <script>
 
+    /* SUPABASE CONFIGURATION */
 
-/* =========================================
-   SUPABASE CONFIGURATION
-========================================= */
+    const SUPABASE_URL =
+        "https://koheruqspqwvoaovhxkb.supabase.co";
 
+    const SUPABASE_KEY =
+        "sb_publishable_ER3AShJ0cie9WLYBNHak4g_m3KUTLg7";
 
-const SUPABASE_URL =
-    "https://koheruqspqwvoaovhxkb.supabase.co";
-
-
-const SUPABASE_KEY =
-    "sb_publishable_ER3AShJ0cie9WLYBNHak4g_m3KUTLg7";
-
-
-const supabaseClient =
-    supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
-    );
-
-
-/* =========================================
-   ELEMENTS
-========================================= */
-
-
-const requestForm =
-    document.getElementById("requestForm");
-
-
-const submitBtn =
-    document.getElementById("submitBtn");
-
-
-const successBox =
-    document.getElementById("successBox");
-
-
-const errorBox =
-    document.getElementById("errorBox");
-
-
-const requestCodeElement =
-    document.getElementById("requestCode");
-
-
-/* =========================================
-   GENERATE REQUEST CODE
-========================================= */
-
-
-function generateRequestCode() {
-
-    const characters =
-        "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-
-    let code = "";
-
-    for (let i = 0; i < 6; i++) {
-
-        const randomIndex =
-            Math.floor(
-                Math.random() * characters.length
-            );
-
-        code += characters[randomIndex];
-
-    }
-
-    return "EDU-" + code;
-
-}
-
-
-/* =========================================
-   SUBMIT REQUEST
-========================================= */
-
-
-requestForm.addEventListener(
-    "submit",
-    async function(event) {
-
-        event.preventDefault();
-
-
-        /* Hide previous messages */
-
-        errorBox.style.display = "none";
-
-        successBox.style.display = "none";
-
-
-        /* Disable button */
-
-        submitBtn.disabled = true;
-
-        submitBtn.textContent = "Submitting...";
-
-
-        /* Generate unique-looking request code */
-
-        const requestCode =
-            generateRequestCode();
-
-
-        /* Collect form data */
-
-        const requestData = {
-
-            student_name:
-                document
-                    .getElementById("studentName")
-                    .value
-                    .trim(),
-
-            contact:
-                document
-                    .getElementById("contact")
-                    .value
-                    .trim(),
-
-            class:
-                document
-                    .getElementById("class")
-                    .value,
-
-            subject:
-                document
-                    .getElementById("subject")
-                    .value,
-
-            chapter:
-                document
-                    .getElementById("chapter")
-                    .value
-                    .trim(),
-
-            material:
-                document
-                    .getElementById("material")
-                    .value,
-
-            message:
-                document
-                    .getElementById("message")
-                    .value
-                    .trim(),
-
-            status:
-                "Pending",
-
-            request_code:
-                requestCode
-
-        };
-
-
-        console.log(
-            "Sending request:",
-            requestData
+    const supabaseClient =
+        window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_KEY
         );
 
 
-        try {
+    /* GENERATE REQUEST ID */
+
+    function generateRequestCode() {
+
+        const characters =
+            "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+
+        let code = "";
+
+        for (let i = 0; i < 6; i++) {
+
+            const randomIndex =
+                Math.floor(
+                    Math.random() * characters.length
+                );
+
+            code += characters[randomIndex];
+
+        }
+
+        return "EDU-" + code;
+    }
 
 
-            /* =====================================
-               INSERT INTO SUPABASE
-            ===================================== */
+    /* FORM SUBMISSION */
 
-            const result =
-                await Promise.race([
+    document
+        .getElementById("requestForm")
+        .addEventListener("submit", async function(event) {
 
+            event.preventDefault();
+
+            const submitBtn =
+                document.getElementById("submitBtn");
+
+            const successBox =
+                document.getElementById("successBox");
+
+            const errorBox =
+                document.getElementById("errorBox");
+
+            successBox.style.display = "none";
+            errorBox.style.display = "none";
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = "Submitting...";
+
+
+            const requestCode =
+                generateRequestCode();
+
+
+            const requestData = {
+
+                student_name:
+                    document
+                        .getElementById("studentName")
+                        .value
+                        .trim(),
+
+                contact:
+                    document
+                        .getElementById("contact")
+                        .value
+                        .trim(),
+
+                class:
+                    document
+                        .getElementById("class")
+                        .value,
+
+                subject:
+                    document
+                        .getElementById("subject")
+                        .value
+                        .trim(),
+
+                chapter:
+                    document
+                        .getElementById("chapter")
+                        .value
+                        .trim(),
+
+                material:
+                    document
+                        .getElementById("material")
+                        .value,
+
+                message:
+                    document
+                        .getElementById("message")
+                        .value
+                        .trim(),
+
+                status: "Pending",
+
+                request_code: requestCode
+
+            };
+
+
+            try {
+
+                const timeoutPromise =
+                    new Promise((_, reject) => {
+
+                        setTimeout(() => {
+
+                            reject(
+                                new Error(
+                                    "Request timed out. Please try again."
+                                )
+                            );
+
+                        }, 10000);
+
+                    });
+
+
+                const insertPromise =
                     supabaseClient
                         .from("requests")
-                        .insert([
-                            requestData
-                        ]),
-
-                    /* 10 second timeout */
-
-                    new Promise(
-                        (_, reject) =>
-                            setTimeout(
-                                () =>
-                                    reject(
-                                        new Error(
-                                            "Supabase request timed out after 10 seconds."
-                                        )
-                                    ),
-                                10000
-                            )
-                    )
-
-                ]);
+                        .insert([requestData]);
 
 
-            console.log(
-                "Supabase response:",
-                result
-            );
+                const { error } =
+                    await Promise.race([
+                        insertPromise,
+                        timeoutPromise
+                    ]);
 
 
-            /* Check Supabase error */
+                if (error) {
+                    throw error;
+                }
 
-            if (result.error) {
 
-                throw result.error;
+                document
+                    .getElementById("requestCode")
+                    .textContent = requestCode;
+
+
+                successBox.style.display = "block";
+
+                document
+                    .getElementById("requestForm")
+                    .reset();
+
+
+                submitBtn.disabled = false;
+                submitBtn.textContent = "Submit Request";
+
+
+                window.scrollTo({
+                    top: successBox.offsetTop - 30,
+                    behavior: "smooth"
+                });
+
+
+            } catch (error) {
+
+                console.error(error);
+
+                errorBox.textContent =
+                    "Unable to submit your request. Please try again.";
+
+                errorBox.style.display = "block";
+
+                submitBtn.disabled = false;
+                submitBtn.textContent = "Submit Request";
 
             }
 
-
-            /* =====================================
-               SUCCESS
-            ===================================== */
-
-
-            requestCodeElement.textContent =
-                requestCode;
-
-
-            successBox.style.display =
-                "block";
-
-
-            requestForm.reset();
-
-
-            successBox.scrollIntoView({
-
-                behavior: "smooth",
-
-                block: "center"
-
-            });
-
-
-        }
-
-
-        catch (error) {
-
-
-            console.error(
-                "SUBMISSION ERROR:",
-                error
-            );
-
-
-            errorBox.textContent =
-                "Could not submit your request: "
-                + error.message;
-
-
-            errorBox.style.display =
-                "block";
-
-
-        }
-
-
-        finally {
-
-
-            submitBtn.disabled =
-                false;
-
-
-            submitBtn.textContent =
-                "Submit Request";
-
-
-        }
-
-    }
-);
-
+        });
 
 </script>
 
-
 </body>
-
 </html>
