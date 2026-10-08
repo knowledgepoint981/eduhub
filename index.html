@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Knowledge Point EduHub | Student Portal</title>
@@ -13,17 +16,19 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+
     <style>
 
         /* =====================================================
            KNOWLEDGE POINT EDUHUB
-           PREMIUM BLACK • EMERALD • GOLD THEME
+           PREMIUM BLACK • EMERALD • GOLD
         ===================================================== */
 
         :root {
+
             --black: #07110d;
             --black-soft: #0d1914;
-            --black-card: #101f18;
+            --black-card: #10231a;
 
             --emerald-dark: #063d2b;
             --emerald: #087f5b;
@@ -33,10 +38,13 @@
             --gold-light: #f0d477;
 
             --white: #ffffff;
+
             --text: #17231e;
             --muted: #66736d;
 
             --background: #f3f6f4;
+
+            --border: #dbe4df;
 
             --success-bg: #e2f3ea;
             --success-text: #146c43;
@@ -51,33 +59,44 @@
         ===================================================== */
 
         * {
+
             box-sizing: border-box;
+
             margin: 0;
+
             padding: 0;
+
         }
 
 
         html {
+
             scroll-behavior: smooth;
+
         }
 
 
         body {
+
             font-family:
                 "Segoe UI",
                 Arial,
                 sans-serif;
 
             background:
+
                 radial-gradient(
                     circle at top left,
                     rgba(8,127,91,0.07),
                     transparent 35%
                 ),
+
                 var(--background);
 
             color: var(--text);
+
             min-height: 100vh;
+
         }
 
 
@@ -86,21 +105,28 @@
         ===================================================== */
 
         nav {
+
             position: sticky;
+
             top: 0;
+
             z-index: 1000;
 
             min-height: 78px;
 
-            padding: 12px 6%;
+            padding:
+                11px 6%;
 
             display: flex;
+
             align-items: center;
+
             justify-content: space-between;
 
             gap: 20px;
 
             background:
+
                 linear-gradient(
                     135deg,
                     var(--black),
@@ -108,12 +134,15 @@
                 );
 
             border-bottom:
+
                 1px solid
-                rgba(212,175,55,0.28);
+                rgba(212,175,55,0.30);
 
             box-shadow:
+
                 0 8px 30px
-                rgba(0,0,0,0.18);
+                rgba(0,0,0,0.20);
+
         }
 
 
@@ -122,40 +151,44 @@
         ===================================================== */
 
         .brand {
+
             display: flex;
+
             align-items: center;
+
             gap: 13px;
 
             text-decoration: none;
+
             color: white;
+
         }
 
 
-        /*
-           =====================================================
-           LOGO PLACEHOLDER
+        /* =====================================================
+           CIRCULAR LOGO
+        ===================================================== */
 
-           Replace the content inside this div with:
+        .logo-container {
 
-           <img src="logo.png" alt="Knowledge Point EduHub Logo">
+            width: 56px;
 
-           Your logo should preferably be a transparent PNG.
-        =====================================================
-        */
+            height: 56px;
 
-        .logo-placeholder {
-            width: 52px;
-            height: 52px;
-
-            min-width: 52px;
+            min-width: 56px;
 
             border-radius: 50%;
 
             display: flex;
+
             align-items: center;
+
             justify-content: center;
 
+            overflow: hidden;
+
             background:
+
                 linear-gradient(
                     145deg,
                     var(--emerald),
@@ -163,111 +196,134 @@
                 );
 
             border:
+
                 2px solid
                 var(--gold);
 
             box-shadow:
-                0 0 0 3px rgba(212,175,55,0.12),
-                0 6px 18px rgba(0,0,0,0.3);
 
-            overflow: hidden;
+                0 0 0 3px
+                rgba(212,175,55,0.12),
+
+                0 6px 18px
+                rgba(0,0,0,0.30);
+
         }
 
 
-        .logo-placeholder span {
-            color: var(--gold-light);
-            font-size: 11px;
-            font-weight: 800;
-            text-align: center;
-            line-height: 1.1;
-            letter-spacing: 0.5px;
-        }
+        .logo-container img {
 
-
-        /*
-        When you have your logo, replace the placeholder
-        with this:
-
-        .logo-placeholder img {
             width: 100%;
+
             height: 100%;
+
             object-fit: cover;
+
+            display: block;
+
         }
-        */
 
 
         .brand-text {
+
             display: flex;
+
             flex-direction: column;
+
         }
 
 
         .brand-name {
+
             font-size: 21px;
+
             font-weight: 800;
+
             letter-spacing: 0.2px;
+
         }
 
 
         .brand-name span {
+
             color: var(--gold-light);
+
         }
 
 
         .brand-slogan {
+
             margin-top: 2px;
 
-            color: rgba(255,255,255,0.68);
+            color:
+                rgba(255,255,255,0.68);
 
             font-size: 10px;
+
             letter-spacing: 1.1px;
+
             text-transform: uppercase;
+
         }
 
 
         /* =====================================================
-           NAV LINKS
+           NAVIGATION LINKS
         ===================================================== */
 
         .nav-links {
+
             display: flex;
+
             align-items: center;
+
             gap: 7px;
+
             flex-wrap: wrap;
+
         }
 
 
         .nav-links a {
-            color: rgba(255,255,255,0.82);
+
+            color:
+                rgba(255,255,255,0.82);
 
             text-decoration: none;
 
-            padding: 10px 16px;
+            padding:
+                10px 16px;
 
             border-radius: 9px;
 
             font-size: 14px;
+
             font-weight: 600;
 
             transition:
-                background 0.25s ease,
-                color 0.25s ease,
-                transform 0.25s ease;
+                0.25s ease;
+
         }
 
 
         .nav-links a:hover {
+
             background:
                 rgba(255,255,255,0.08);
 
-            color: var(--gold-light);
+            color:
+                var(--gold-light);
 
-            transform: translateY(-1px);
+            transform:
+                translateY(-1px);
+
         }
 
 
         .nav-links a.active {
+
             background:
+
                 linear-gradient(
                     135deg,
                     var(--emerald),
@@ -277,12 +333,15 @@
             color: white;
 
             border:
+
                 1px solid
                 rgba(212,175,55,0.35);
 
             box-shadow:
+
                 0 5px 15px
                 rgba(0,0,0,0.18);
+
         }
 
 
@@ -291,13 +350,16 @@
         ===================================================== */
 
         .hero {
+
             position: relative;
 
             max-width: 1100px;
 
-            margin: 38px auto 25px;
+            margin:
+                38px auto 25px;
 
-            padding: 62px 30px;
+            padding:
+                62px 30px;
 
             text-align: center;
 
@@ -306,16 +368,19 @@
             border-radius: 24px;
 
             background:
+
                 radial-gradient(
                     circle at 15% 20%,
                     rgba(16,168,117,0.25),
                     transparent 30%
                 ),
+
                 radial-gradient(
                     circle at 85% 80%,
                     rgba(212,175,55,0.13),
                     transparent 28%
                 ),
+
                 linear-gradient(
                     135deg,
                     #06100c,
@@ -326,112 +391,142 @@
             color: white;
 
             border:
+
                 1px solid
                 rgba(212,175,55,0.25);
 
             box-shadow:
+
                 0 18px 45px
                 rgba(0,0,0,0.18);
+
         }
 
 
         .hero::before {
+
             content: "";
 
             position: absolute;
 
             width: 260px;
+
             height: 260px;
 
             border-radius: 50%;
 
             border:
+
                 1px solid
                 rgba(212,175,55,0.15);
 
             top: -130px;
+
             right: -70px;
+
         }
 
 
         .hero::after {
+
             content: "";
 
             position: absolute;
 
             width: 180px;
+
             height: 180px;
 
             border-radius: 50%;
 
             border:
+
                 1px solid
-                rgba(16,168,117,0.2);
+                rgba(16,168,117,0.20);
 
             bottom: -100px;
+
             left: -50px;
+
         }
 
 
         .hero-content {
+
             position: relative;
+
             z-index: 2;
+
         }
 
 
         .hero-badge {
+
             display: inline-block;
 
-            padding: 7px 16px;
+            padding:
+                7px 16px;
 
             margin-bottom: 18px;
 
             border-radius: 50px;
 
             background:
-                rgba(212,175,55,0.1);
+                rgba(212,175,55,0.10);
 
             border:
                 1px solid
                 rgba(212,175,55,0.35);
 
-            color: var(--gold-light);
+            color:
+                var(--gold-light);
 
             font-size: 11px;
+
             font-weight: 800;
 
             letter-spacing: 1.5px;
 
             text-transform: uppercase;
+
         }
 
 
         .hero h1 {
-            font-size: clamp(31px, 5vw, 48px);
+
+            font-size:
+                clamp(31px, 5vw, 48px);
 
             line-height: 1.15;
 
             margin-bottom: 13px;
 
             font-weight: 850;
+
         }
 
 
         .hero h1 span {
-            color: var(--gold-light);
+
+            color:
+                var(--gold-light);
+
         }
 
 
         .hero p {
+
             max-width: 720px;
 
             margin: auto;
 
-            color: rgba(255,255,255,0.78);
+            color:
+                rgba(255,255,255,0.80);
 
             font-size: 16px;
 
             line-height: 1.7;
+
         }
 
 
@@ -440,9 +535,11 @@
         ===================================================== */
 
         .container {
+
             max-width: 900px;
 
-            margin: 30px auto 55px;
+            margin:
+                30px auto 55px;
 
             padding: 34px;
 
@@ -455,31 +552,39 @@
                 rgba(8,127,91,0.09);
 
             box-shadow:
+
                 0 10px 35px
                 rgba(7,17,13,0.08);
+
         }
 
 
         .container h2 {
+
             margin-bottom: 25px;
 
-            color: var(--black);
+            color:
+                var(--black);
 
             font-size: 24px;
+
         }
 
 
         .container h2::after {
+
             content: "";
 
             display: block;
 
             width: 48px;
+
             height: 3px;
 
             margin-top: 9px;
 
             background:
+
                 linear-gradient(
                     90deg,
                     var(--emerald),
@@ -487,6 +592,7 @@
                 );
 
             border-radius: 10px;
+
         }
 
 
@@ -495,24 +601,31 @@
         ===================================================== */
 
         label {
+
             display: block;
 
             margin-top: 17px;
+
             margin-bottom: 7px;
 
-            color: #25342d;
+            color:
+                #25342d;
 
             font-size: 14px;
+
             font-weight: 700;
+
         }
 
 
         input,
         select,
         textarea {
+
             width: 100%;
 
-            padding: 13px 14px;
+            padding:
+                13px 14px;
 
             border:
                 1px solid
@@ -522,29 +635,33 @@
 
             background: #fbfcfc;
 
-            color: #17231e;
+            color:
+                #17231e;
 
             font-family: inherit;
 
             font-size: 15px;
 
             transition:
-                border 0.2s ease,
-                box-shadow 0.2s ease,
-                background 0.2s ease;
+                0.2s ease;
+
         }
 
 
         input:hover,
         select:hover,
         textarea:hover {
-            border-color: #aebdb6;
+
+            border-color:
+                #aebdb6;
+
         }
 
 
         input:focus,
         select:focus,
         textarea:focus {
+
             outline: none;
 
             background: white;
@@ -553,15 +670,19 @@
                 var(--emerald);
 
             box-shadow:
+
                 0 0 0 3px
-                rgba(8,127,91,0.1);
+                rgba(8,127,91,0.10);
+
         }
 
 
         textarea {
+
             min-height: 115px;
 
             resize: vertical;
+
         }
 
 
@@ -570,17 +691,20 @@
         ===================================================== */
 
         button {
+
             width: 100%;
 
             margin-top: 24px;
 
-            padding: 14px 18px;
+            padding:
+                14px 18px;
 
             border: none;
 
             border-radius: 10px;
 
             background:
+
                 linear-gradient(
                     135deg,
                     var(--emerald),
@@ -592,45 +716,59 @@
             font-family: inherit;
 
             font-size: 15px;
+
             font-weight: 750;
 
             cursor: pointer;
 
             box-shadow:
+
                 0 7px 18px
                 rgba(8,127,91,0.18);
 
             transition:
-                transform 0.2s ease,
-                box-shadow 0.2s ease,
-                filter 0.2s ease;
+                0.2s ease;
+
         }
 
 
         button:hover {
-            transform: translateY(-1px);
+
+            transform:
+                translateY(-1px);
 
             box-shadow:
+
                 0 10px 22px
                 rgba(8,127,91,0.25);
 
-            filter: brightness(1.05);
+            filter:
+                brightness(1.05);
+
         }
 
 
         button:active {
-            transform: translateY(0);
+
+            transform:
+                translateY(0);
+
         }
 
 
         button:disabled {
-            background: #8da99d;
+
+            background:
+                #8da99d;
 
             box-shadow: none;
 
-            cursor: not-allowed;
+            cursor:
+                not-allowed;
 
-            transform: none;
+            transform:
+                none;
+
         }
 
 
@@ -639,6 +777,7 @@
         ===================================================== */
 
         .status-section {
+
             margin-top: 32px;
 
             padding-top: 28px;
@@ -648,19 +787,24 @@
                 #e4e9e6;
 
             text-align: center;
+
         }
 
 
         .status-section p {
+
             margin-bottom: 13px;
 
-            color: var(--muted);
+            color:
+                var(--muted);
 
             font-size: 14px;
+
         }
 
 
         .status-btn {
+
             display: block;
 
             width: 100%;
@@ -678,23 +822,29 @@
 
             border:
                 1px solid
-                rgba(212,175,55,0.3);
+                rgba(212,175,55,0.30);
 
             font-size: 14px;
+
             font-weight: 700;
 
             transition:
                 0.2s ease;
+
         }
 
 
         .status-btn:hover {
+
             background:
                 var(--emerald-dark);
 
-            color: var(--gold-light);
+            color:
+                var(--gold-light);
 
-            transform: translateY(-1px);
+            transform:
+                translateY(-1px);
+
         }
 
 
@@ -703,15 +853,18 @@
         ===================================================== */
 
         .follow-section {
+
             position: relative;
 
             margin-top: 34px;
 
-            padding: 32px 22px;
+            padding:
+                32px 22px;
 
             text-align: center;
 
             background:
+
                 linear-gradient(
                     145deg,
                     #f4f8f6,
@@ -725,15 +878,18 @@
                 rgba(8,127,91,0.12);
 
             overflow: hidden;
+
         }
 
 
         .follow-section::before {
+
             content: "";
 
             position: absolute;
 
             width: 130px;
+
             height: 130px;
 
             border-radius: 50%;
@@ -742,61 +898,79 @@
                 rgba(212,175,55,0.08);
 
             top: -65px;
+
             right: -35px;
+
         }
 
 
         .follow-section h2 {
+
             position: relative;
 
-            color: var(--black);
+            color:
+                var(--black);
 
             margin-bottom: 9px;
 
             font-size: 22px;
+
         }
 
 
         .follow-section h2::after {
+
             display: none;
+
         }
 
 
         .follow-section p {
+
             position: relative;
 
-            color: var(--muted);
+            color:
+                var(--muted);
 
             margin-bottom: 14px;
 
             font-size: 14px;
 
             line-height: 1.6;
+
         }
 
 
         .follower-count {
+
             position: relative;
 
             font-size: 22px;
+
             font-weight: 800;
 
-            margin: 17px 0;
+            margin:
+                17px 0;
 
-            color: var(--emerald);
+            color:
+                var(--emerald);
+
         }
 
 
         .follow-section button {
+
             position: relative;
 
             max-width: 300px;
 
-            margin: 10px auto;
+            margin:
+                10px auto;
 
             display: block;
 
             background:
+
                 linear-gradient(
                     135deg,
                     var(--black),
@@ -805,36 +979,44 @@
 
             border:
                 1px solid
-                rgba(212,175,55,0.3);
+                rgba(212,175,55,0.30);
+
         }
 
 
         .follow-section button:hover {
+
             background:
+
                 linear-gradient(
                     135deg,
                     var(--emerald-dark),
                     var(--emerald)
                 );
+
         }
 
 
         .follow-message {
+
             position: relative;
 
             font-weight: 700;
 
             margin-top: 10px;
 
-            color: var(--emerald);
+            color:
+                var(--emerald);
+
         }
 
 
         /* =====================================================
-           SUCCESS / ERROR
+           SUCCESS BOX
         ===================================================== */
 
         .success {
+
             display: none;
 
             margin-top: 22px;
@@ -852,10 +1034,16 @@
             border-left:
                 4px solid
                 var(--emerald);
+
         }
 
 
+        /* =====================================================
+           ERROR BOX
+        ===================================================== */
+
         .error {
+
             display: none;
 
             margin-top: 22px;
@@ -873,10 +1061,16 @@
             border-left:
                 4px solid
                 #dc3545;
+
         }
 
 
+        /* =====================================================
+           REQUEST CODE
+        ===================================================== */
+
         .request-code {
+
             margin-top: 12px;
 
             padding: 14px;
@@ -899,6 +1093,7 @@
 
             color:
                 var(--emerald-dark);
+
         }
 
 
@@ -907,7 +1102,9 @@
         ===================================================== */
 
         footer {
-            padding: 32px 20px;
+
+            padding:
+                32px 20px;
 
             text-align: center;
 
@@ -921,17 +1118,21 @@
 
             border-top:
                 1px solid
-                rgba(212,175,55,0.2);
+                rgba(212,175,55,0.20);
+
         }
 
 
         footer strong {
+
             color:
                 var(--gold-light);
+
         }
 
 
         .footer-slogan {
+
             margin-top: 6px;
 
             color:
@@ -940,6 +1141,7 @@
             font-size: 11px;
 
             letter-spacing: 1px;
+
         }
 
 
@@ -950,82 +1152,113 @@
         @media (max-width: 700px) {
 
             nav {
-                padding: 11px 15px;
 
-                justify-content: center;
+                padding:
+                    11px 15px;
+
+                justify-content:
+                    center;
+
             }
 
 
             .brand {
+
                 width: 100%;
 
-                justify-content: center;
+                justify-content:
+                    center;
+
             }
 
 
             .nav-links {
+
                 width: 100%;
 
-                justify-content: center;
+                justify-content:
+                    center;
+
             }
 
 
             .nav-links a {
-                padding: 9px 12px;
+
+                padding:
+                    9px 12px;
 
                 font-size: 13px;
+
             }
 
 
             .hero {
+
                 margin:
                     20px 12px 20px;
 
                 padding:
                     45px 20px;
 
-                border-radius: 19px;
+                border-radius:
+                    19px;
+
             }
 
 
             .hero p {
+
                 font-size: 14px;
+
             }
 
 
             .container {
+
                 margin:
                     18px 12px 40px;
 
                 padding:
                     22px 18px;
 
-                border-radius: 17px;
+                border-radius:
+                    17px;
+
             }
 
 
             .container h2 {
+
                 font-size: 21px;
+
             }
 
 
             .brand-name {
+
                 font-size: 18px;
+
             }
 
 
             .brand-slogan {
+
                 font-size: 8px;
 
-                letter-spacing: 0.8px;
+                letter-spacing:
+                    0.8px;
+
             }
 
 
-            .logo-placeholder {
-                width: 47px;
-                height: 47px;
+            .logo-container {
 
-                min-width: 47px;
+                width: 49px;
+
+                height: 49px;
+
+                min-width: 49px;
+
             }
 
         }
@@ -1034,25 +1267,32 @@
         @media (max-width: 390px) {
 
             .nav-links a {
+
                 padding:
                     8px 9px;
 
                 font-size: 12px;
+
             }
 
 
             .brand-name {
+
                 font-size: 16px;
+
             }
 
 
             .brand-slogan {
+
                 display: none;
+
             }
 
         }
 
     </style>
+
 </head>
 
 
@@ -1065,28 +1305,22 @@
 
 <nav>
 
+
     <a href="index.html" class="brand">
 
+
         <!-- =================================================
-             LOGO PLACEHOLDER
+             CIRCULAR LOGO
 
-             INSERT YOUR CIRCULAR LOGO HERE LATER.
-
-             Example:
-
-             <img
-                 src="logo.png"
-                 alt="Knowledge Point EduHub Logo"
-             >
-
+             KEEP logo.png IN THE SAME FOLDER AS index.html
         ================================================== -->
 
-        <div class="logo-placeholder">
+        <div class="logo-container">
 
-            <span>
-                YOUR<br>
-                LOGO
-            </span>
+            <img
+                src="logo.png"
+                alt="Knowledge Point EduHub Logo"
+            >
 
         </div>
 
@@ -1094,29 +1328,45 @@
         <div class="brand-text">
 
             <div class="brand-name">
-                Knowledge Point <span>EduHub</span>
+
+                Knowledge Point
+                <span>EduHub</span>
+
             </div>
 
+
             <div class="brand-slogan">
+
                 Where Knowledge Meets Excellence
+
             </div>
 
         </div>
+
 
     </a>
 
 
     <div class="nav-links">
 
-        <a href="index.html" class="active">
+
+        <a
+            href="index.html"
+            class="active"
+        >
             Submit Request
         </a>
 
-        <a href="status.html">
+
+        <a
+            href="status.html"
+        >
             Check Status
         </a>
 
+
     </div>
+
 
 </nav>
 
@@ -1128,39 +1378,59 @@
 
 <section class="hero">
 
+
     <div class="hero-content">
 
+
         <div class="hero-badge">
+
             Knowledge • Excellence • Success
+
         </div>
 
 
         <h1>
-            Student <span>Request Portal</span>
+
+            Student
+            <span>Request Portal</span>
+
         </h1>
 
 
         <p>
-            Request notes, MCQs, quizzes, guess papers and
-            other quality educational materials — all in one place.
+
+            Request notes, MCQs, quizzes, guess papers
+            and other quality educational materials —
+            all in one place.
+
         </p>
 
+
     </div>
+
 
 </section>
 
 
 
 <!-- =====================================================
-     REQUEST FORM
+     MAIN CONTAINER
 ====================================================== -->
 
 <div class="container">
 
+
     <h2>
+
         Submit a Material Request
+
     </h2>
 
+
+
+    <!-- =================================================
+         REQUEST FORM
+    ================================================== -->
 
     <form id="requestForm">
 
@@ -1168,8 +1438,11 @@
         <!-- STUDENT NAME -->
 
         <label for="studentName">
+
             Student Name
+
         </label>
+
 
         <input
             type="text"
@@ -1183,8 +1456,11 @@
         <!-- CONTACT -->
 
         <label for="contact">
+
             Contact
+
         </label>
+
 
         <input
             type="text"
@@ -1198,33 +1474,56 @@
         <!-- CLASS -->
 
         <label for="class">
+
             Class
+
         </label>
 
-        <select id="class" required>
+
+        <select
+            id="class"
+            required
+        >
 
             <option value="">
+
                 Select Class
+
             </option>
+
 
             <option value="9th">
+
                 9th
+
             </option>
+
 
             <option value="10th">
+
                 10th
+
             </option>
+
 
             <option value="11th">
+
                 11th
+
             </option>
+
 
             <option value="12th">
+
                 12th
+
             </option>
 
+
             <option value="Other">
+
                 Other
+
             </option>
 
         </select>
@@ -1234,8 +1533,11 @@
         <!-- SUBJECT -->
 
         <label for="subject">
+
             Subject
+
         </label>
+
 
         <input
             type="text"
@@ -1249,8 +1551,11 @@
         <!-- CHAPTER -->
 
         <label for="chapter">
+
             Chapter / Topic
+
         </label>
+
 
         <input
             type="text"
@@ -1264,33 +1569,56 @@
         <!-- MATERIAL -->
 
         <label for="material">
+
             Material Required
+
         </label>
 
-        <select id="material" required>
+
+        <select
+            id="material"
+            required
+        >
 
             <option value="">
+
                 Select Material
+
             </option>
+
 
             <option value="Notes">
+
                 Notes
+
             </option>
+
 
             <option value="MCQs">
+
                 MCQs
+
             </option>
+
 
             <option value="Quiz">
+
                 Quiz
+
             </option>
+
 
             <option value="Guess Paper">
+
                 Guess Paper
+
             </option>
 
+
             <option value="Other">
+
                 Other
+
             </option>
 
         </select>
@@ -1300,8 +1628,11 @@
         <!-- MESSAGE -->
 
         <label for="message">
+
             Additional Details
+
         </label>
+
 
         <textarea
             id="message"
@@ -1316,8 +1647,11 @@
             type="submit"
             id="submitBtn"
         >
+
             Submit Request
+
         </button>
+
 
     </form>
 
@@ -1332,13 +1666,19 @@
         class="success"
     >
 
+
         <strong>
+
             ✓ Request Submitted Successfully!
+
         </strong>
 
+
         <p style="margin-top:8px;">
+
             Please save your Request ID.
             You will need it to check your status.
+
         </p>
 
 
@@ -1349,7 +1689,10 @@
 
 
         <p style="margin-top:12px;">
-            You can check your request anytime using the button below.
+
+            You can check your request anytime
+            using the button below.
+
         </p>
 
 
@@ -1358,8 +1701,11 @@
             class="status-btn"
             style="margin-top:10px;"
         >
+
             🔎 Check Request Status
+
         </a>
+
 
     </div>
 
@@ -1382,44 +1728,65 @@
 
     <div class="status-section">
 
+
         <p>
+
             Already submitted a request?
+
         </p>
+
 
         <a
             href="status.html"
             class="status-btn"
         >
+
             🔎 Check Your Request Status
+
         </a>
+
 
     </div>
 
 
 
     <!-- =================================================
-         FOLLOW SECTION
+         FOLLOW EDUHUB
     ================================================== -->
 
     <div class="follow-section">
 
+
         <h2>
+
             ⭐ Follow Knowledge Point EduHub
+
         </h2>
 
+
         <p>
+
             Follow EduHub to stay connected and get access
             to new study materials.
+
         </p>
 
 
         <div class="follower-count">
 
+
             👥
+
+
             <span id="followerCount">
+
                 0
+
             </span>
+
+
             Followers
+
 
         </div>
 
@@ -1428,7 +1795,9 @@
             id="followBtn"
             onclick="followEduHub()"
         >
+
             ⭐ Follow EduHub
+
         </button>
 
 
@@ -1437,7 +1806,9 @@
             class="follow-message"
         ></p>
 
+
     </div>
+
 
 </div>
 
@@ -1449,13 +1820,22 @@
 
 <footer>
 
+
     © 2026
-    <strong>Knowledge Point EduHub</strong>
+
+    <strong>
+        Knowledge Point EduHub
+    </strong>
+
     — Student Material Portal
 
+
     <div class="footer-slogan">
+
         WHERE KNOWLEDGE MEETS EXCELLENCE
+
     </div>
+
 
 </footer>
 
@@ -1490,25 +1870,37 @@ const supabaseClient =
 
 function generateRequestCode() {
 
+
     const characters =
         "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+
 
     let code = "";
 
 
-    for (let i = 0; i < 6; i++) {
+    for (
+        let i = 0;
+        i < 6;
+        i++
+    ) {
+
 
         const randomIndex =
             Math.floor(
-                Math.random() * characters.length
+                Math.random()
+                *
+                characters.length
             );
 
-        code += characters[randomIndex];
+
+        code +=
+            characters[randomIndex];
 
     }
 
 
     return "EDU-" + code;
+
 }
 
 
@@ -1523,7 +1915,9 @@ document
         "submit",
         async function(event) {
 
+
             event.preventDefault();
+
 
 
             const submitBtn =
@@ -1544,6 +1938,7 @@ document
                 );
 
 
+
             successBox.style.display =
                 "none";
 
@@ -1560,6 +1955,7 @@ document
                 "Submitting...";
 
 
+
             const requestCode =
                 generateRequestCode();
 
@@ -1567,7 +1963,9 @@ document
 
             const requestData = {
 
+
                 student_name:
+
                     document
                         .getElementById(
                             "studentName"
@@ -1576,7 +1974,9 @@ document
                         .trim(),
 
 
+
                 contact:
+
                     document
                         .getElementById(
                             "contact"
@@ -1585,7 +1985,9 @@ document
                         .trim(),
 
 
+
                 class:
+
                     document
                         .getElementById(
                             "class"
@@ -1593,7 +1995,9 @@ document
                         .value,
 
 
+
                 subject:
+
                     document
                         .getElementById(
                             "subject"
@@ -1602,7 +2006,9 @@ document
                         .trim(),
 
 
+
                 chapter:
+
                     document
                         .getElementById(
                             "chapter"
@@ -1611,7 +2017,9 @@ document
                         .trim(),
 
 
+
                 material:
+
                     document
                         .getElementById(
                             "material"
@@ -1619,7 +2027,9 @@ document
                         .value,
 
 
+
                 message:
+
                     document
                         .getElementById(
                             "message"
@@ -1628,8 +2038,10 @@ document
                         .trim(),
 
 
+
                 status:
                     "Pending",
+
 
 
                 request_code:
@@ -1642,14 +2054,18 @@ document
             try {
 
 
-                /* 10 SECOND TIMEOUT */
+                /* =========================================
+                   10 SECOND TIMEOUT
+                ========================================== */
 
                 const timeoutPromise =
                     new Promise(
                         (_, reject) => {
 
+
                             setTimeout(
                                 () => {
+
 
                                     reject(
                                         new Error(
@@ -1657,16 +2073,20 @@ document
                                         )
                                     );
 
+
                                 },
                                 10000
                             );
+
 
                         }
                     );
 
 
 
-                /* INSERT REQUEST */
+                /* =========================================
+                   INSERT REQUEST
+                ========================================== */
 
                 const insertPromise =
                     supabaseClient
@@ -1693,7 +2113,9 @@ document
 
 
 
-                /* SHOW REQUEST ID */
+                /* =========================================
+                   SHOW REQUEST ID
+                ========================================== */
 
                 document
                     .getElementById(
@@ -1709,7 +2131,9 @@ document
 
 
 
-                /* RESET FORM */
+                /* =========================================
+                   RESET FORM
+                ========================================== */
 
                 document
                     .getElementById(
@@ -1728,7 +2152,9 @@ document
 
 
 
-                /* SCROLL TO SUCCESS */
+                /* =========================================
+                   SCROLL TO SUCCESS
+                ========================================== */
 
                 window.scrollTo({
 
@@ -1743,6 +2169,7 @@ document
 
 
             }
+
             catch (error) {
 
 
@@ -1750,6 +2177,7 @@ document
                     "Submission error:",
                     error
                 );
+
 
 
                 errorBox.textContent =
@@ -1767,6 +2195,7 @@ document
                 submitBtn.textContent =
                     "Submit Request";
 
+
             }
 
         }
@@ -1783,9 +2212,12 @@ const FOLLOWER_STORAGE_KEY =
 
 
 
-/* GET OR CREATE BROWSER FOLLOWER ID */
+/* =====================================================
+   GET OR CREATE BROWSER FOLLOWER ID
+===================================================== */
 
 function getFollowerId() {
+
 
     let followerId =
         localStorage.getItem(
@@ -1793,10 +2225,13 @@ function getFollowerId() {
         );
 
 
+
     if (!followerId) {
+
 
         followerId =
             crypto.randomUUID();
+
 
 
         localStorage.setItem(
@@ -1804,10 +2239,12 @@ function getFollowerId() {
             followerId
         );
 
+
     }
 
 
     return followerId;
+
 }
 
 
@@ -1829,12 +2266,15 @@ async function loadFollowerCount() {
 
     if (error) {
 
+
         console.error(
             "Unable to load follower count:",
             error
         );
 
+
         return;
+
 
     }
 
@@ -1870,12 +2310,14 @@ async function followEduHub() {
         );
 
 
+
     button.disabled =
         true;
 
 
     button.textContent =
         "Following...";
+
 
 
     const followerId =
@@ -1918,11 +2360,14 @@ async function followEduHub() {
 
         return;
 
+
     }
 
 
 
-    /* SUCCESS */
+    /* =========================================
+       SUCCESS
+    ========================================== */
 
     button.textContent =
         "✓ Following EduHub";
@@ -1934,6 +2379,7 @@ async function followEduHub() {
 
     await loadFollowerCount();
 
+
 }
 
 
@@ -1944,7 +2390,10 @@ async function followEduHub() {
 
 loadFollowerCount();
 
+
 </script>
 
+
 </body>
+
 </html>
