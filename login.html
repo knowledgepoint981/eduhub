@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login | Knowledge Point EduHub</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --black: #050807;
+            --black-2: #0a0f0d;
+            --card: #0d1512;
+            --card-2: #111c18;
+            --emerald: #00c98d;
+            --emerald-dark: #008f68;
+            --gold: #d8b45a;
+            --white: #f5f8f6;
+            --muted: #9ba9a3;
+            --border: rgba(216, 180, 90, 0.20);
+            --danger: #ff6868;
+            --success: #35d49b;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: Arial, Helvetica, sans-serif;
+            color: var(--white);
+            background:
+                radial-gradient(circle at 50% 0%, rgba(0, 201, 141, 0.12), transparent 32%),
+                radial-gradient(circle at 100% 100%, rgba(216, 180, 90, 0.07), transparent 30%),
+                var(--black);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 25px;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(
+                    90deg,
+                    transparent 49.8%,
+                    rgba(0, 201, 141, 0.025) 50%,
+                    transparent 50.2%
+                );
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* TOP BRAND */
+
+        .brand {
+            text-align: center;
+            margin-bottom: 22px;
+        }
+
+        .logo-wrapper {
+            width: 88px;
+            height: 88px;
+            margin: 0 auto 14px;
+            padding: 3px;
+            border-radius: 50%;
+            background: linear-gradient(
+                135deg,
+                var(--gold),
+                var(--emerald),
+                var(--gold)
+            );
+            box-shadow:
+                0 0 30px rgba(0, 201, 141, 0.16),
+                0 0 15px rgba(216, 180, 90, 0.10);
+        }
+
+        .logo {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            display: block;
+            object-fit: cover;
+            background: var(--black);
+        }
+
+        .brand h1 {
+            font-size: 25px;
+            letter-spacing: 0.3px;
+            margin-bottom: 6px;
+        }
+
+        .brand h1 span {
+            color: var(--emerald);
+        }
+
+        .brand p {
+            color: var(--muted);
+            font-size: 13px;
+            letter-spacing: 0.5px;
+        }
+
+        /* CARD */
+
+        .card {
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(255,255,255,0.025),
+                    rgba(255,255,255,0.005)
+                ),
+                var(--card);
+            border: 1px solid var(--border);
+            border-radius: 22px;
+            padding: 28px;
+            box-shadow:
+                0 25px 70px rgba(0,0,0,0.45),
+                inset 0 1px 0 rgba(255,255,255,0.025);
+            backdrop-filter: blur(15px);
+        }
+
+        /* TABS */
+
+        .tabs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5px;
+            background: #080d0b;
+            border: 1px solid rgba(255,255,255,0.05);
+            padding: 5px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+        }
+
+        .tab {
+            border: none;
+            background: transparent;
+            color: var(--muted);
+            padding: 11px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.25s;
+        }
+
+        .tab.active {
+            color: var(--white);
+            background: linear-gradient(
+                135deg,
+                rgba(0, 201, 141, 0.18),
+                rgba(0, 201, 141, 0.07)
+            );
+            box-shadow: inset 0 0 0 1px rgba(0,201,141,0.22);
+        }
+
+        /* FORM */
+
+        .form-title {
+            font-size: 22px;
+            margin-bottom: 7px;
+        }
+
+        .form-subtitle {
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.5;
+            margin-bottom: 23px;
+        }
+
+        .field {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            color: #dce5e1;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: 0.3px;
+        }
+
+        .input-wrap {
+            position: relative;
+        }
+
+        input {
+            width: 100%;
+            height: 48px;
+            padding: 0 14px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.09);
+            background: #080e0c;
+            color: var(--white);
+            outline: none;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        input:focus {
+            border-color: rgba(0, 201, 141, 0.65);
+            box-shadow: 0 0 0 3px rgba(0, 201, 141, 0.08);
+        }
+
+        input::placeholder {
+            color: #62716b;
+        }
+
+        .password-input {
+            padding-right: 48px;
+        }
+
+        .show-password {
+            position: absolute;
+            right: 0;
+            top: 0;
+            height: 48px;
+            width: 45px;
+            border: none;
+            background: transparent;
+            color: #7e9189;
+            cursor: pointer;
+            font-size: 17px;
+        }
+
+        .show-password:hover {
+            color: var(--emerald);
+        }
+
+        /* BUTTON */
+
+        .main-btn {
+            width: 100%;
+            height: 50px;
+            border: none;
+            border-radius: 11px;
+            cursor: pointer;
+            color: #04100b;
+            font-weight: 800;
+            font-size: 14px;
+            letter-spacing: 0.2px;
+            background: linear-gradient(
+                135deg,
+                var(--emerald),
+                #00a878
+            );
+            box-shadow: 0 8px 25px rgba(0, 201, 141, 0.17);
+            transition: 0.25s;
+            margin-top: 5px;
+        }
+
+        .main-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 12px 30px rgba(0, 201, 141, 0.25);
+        }
+
+        .main-btn:disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* MESSAGES */
+
+        .message {
+            display: none;
+            padding: 12px 13px;
+            border-radius: 9px;
+            font-size: 12px;
+            line-height: 1.5;
+            margin-bottom: 16px;
+        }
+
+        .message.error {
+            display: block;
+            color: #ffb1b1;
+            background: rgba(255, 80, 80, 0.08);
+            border: 1px solid rgba(255, 80, 80, 0.20);
+        }
+
+        .message.success {
+            display: block;
+            color: #9ff2cf;
+            background: rgba(0, 201, 141, 0.08);
+            border: 1px solid rgba(0, 201, 141, 0.20);
+        }
+
+        /* FORGOT */
+
+        .forgot {
+            text-align: right;
+            margin-top: -6px;
+            margin-bottom: 18px;
+        }
+
+        .forgot button {
+            background: none;
+            border: none;
+            color: var(--gold);
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .forgot button:hover {
+            text-decoration: underline;
+        }
+
+        /* FOOTER */
+
+        .footer {
+            text-align: center;
+            color: #65736d;
+            font-size: 11px;
+            margin-top: 20px;
+            line-height: 1.6;
+        }
+
+        .footer strong {
+            color: #89978f;
+        }
+
+        .security {
+            margin-top: 16px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255,255,255,0.06);
+            text-align: center;
+            color: #65736d;
+            font-size: 11px;
+        }
+
+        .security span {
+            color: var(--emerald);
+        }
+
+        /* HIDDEN */
+
+        .form {
+            display: none;
+        }
+
+        .form.active {
+            display: block;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 520px) {
+            body {
+                padding: 15px;
+                align-items: flex-start;
+                padding-top: 30px;
+            }
+
+            .card {
+                padding: 22px 18px;
+                border-radius: 18px;
+            }
+
+            .brand h1 {
+                font-size: 22px;
+            }
+
+            .logo-wrapper {
+                width: 78px;
+                height: 78px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- BRAND -->
+    <div class="brand">
+        <div class="logo-wrapper">
+            <img src="logo.png" alt="Knowledge Point EduHub Logo" class="logo">
+        </div>
+
+        <h1>Knowledge Point <span>EduHub</span></h1>
+        <p>Where Knowledge Meets Excellence</p>
+    </div>
+
+    <!-- MAIN CARD -->
+    <div class="card">
+
+        <!-- TABS -->
+        <div class="tabs">
+            <button class="tab active" id="loginTab">
+                Login
+            </button>
+
+            <button class="tab" id="signupTab">
+                Create Account
+            </button>
+        </div>
+
+        <!-- GLOBAL MESSAGE -->
+        <div id="message" class="message"></div>
+
+        <!-- LOGIN FORM -->
+        <form id="loginForm" class="form active">
+
+            <h2 class="form-title">Welcome Back 👋</h2>
+
+            <p class="form-subtitle">
+                Login to your Knowledge Point EduHub account.
+            </p>
+
+            <div class="field">
+                <label for="loginEmail">Email Address</label>
+
+                <input
+                    type="email"
+                    id="loginEmail"
+                    placeholder="Enter your email"
+                    autocomplete="email"
+                    required
+                >
+            </div>
+
+            <div class="field">
+                <label for="loginPassword">Password</label>
+
+                <div class="input-wrap">
+                    <input
+                        type="password"
+                        id="loginPassword"
+                        class="password-input"
+                        placeholder="Enter your password"
+                        autocomplete="current-password"
+                        required
+                    >
+
+                    <button
+                        type="button"
+                        class="show-password"
+                        onclick="togglePassword('loginPassword', this)"
+                        aria-label="Show password"
+                    >
+                        👁
+                    </button>
+                </div>
+            </div>
+
+            <div class="forgot">
+                <button type="button" onclick="forgotPassword()">
+                    Forgot Password?
+                </button>
+            </div>
+
+            <button type="submit" class="main-btn" id="loginBtn">
+                Login to EduHub
+            </button>
+
+        </form>
+
+
+        <!-- SIGN UP FORM -->
+        <form id="signupForm" class="form">
+
+            <h2 class="form-title">Create Your Account</h2>
+
+            <p class="form-subtitle">
+                Join Knowledge Point EduHub and access your student account.
+            </p>
+
+            <div class="field">
+                <label for="signupName">Full Name</label>
+
+                <input
+                    type="text"
+                    id="signupName"
+                    placeholder="Enter your full name"
+                    autocomplete="name"
+                    required
+                >
+            </div>
+
+            <div class="field">
+                <label for="signupEmail">Email Address</label>
+
+                <input
+                    type="email"
+                    id="signupEmail"
+                    placeholder="Enter your email"
+                    autocomplete="email"
+                    required
+                >
+            </div>
+
+            <div class="field">
+                <label for="signupPassword">Password</label>
+
+                <div class="input-wrap">
+                    <input
+                        type="password"
+                        id="signupPassword"
+                        class="password-input"
+                        placeholder="Create a password"
+                        autocomplete="new-password"
+                        minlength="6"
+                        required
+                    >
+
+                    <button
+                        type="button"
+                        class="show-password"
+                        onclick="togglePassword('signupPassword', this)"
+                        aria-label="Show password"
+                    >
+                        👁
+                    </button>
+                </div>
+            </div>
+
+            <div class="field">
+                <label for="confirmPassword">Confirm Password</label>
+
+                <div class="input-wrap">
+                    <input
+                        type="password"
+                        id="confirmPassword"
+                        class="password-input"
+                        placeholder="Confirm your password"
+                        autocomplete="new-password"
+                        minlength="6"
+                        required
+                    >
+
+                    <button
+                        type="button"
+                        class="show-password"
+                        onclick="togglePassword('confirmPassword', this)"
+                        aria-label="Show password"
+                    >
+                        👁
+                    </button>
+                </div>
+            </div>
+
+            <button type="submit" class="main-btn" id="signupBtn">
+                Create My Account
+            </button>
+
+        </form>
+
+        <div class="security">
+            🔒 <span>Secure authentication</span> powered by Supabase
+        </div>
+
+    </div>
+
+    <div class="footer">
+        © 2026 <strong>Knowledge Point EduHub</strong><br>
+        Where Knowledge Meets Excellence
+    </div>
+
+</div>
+
+
+<script>
+
+    /* ==========================================
+       SUPABASE CONFIGURATION
+    ========================================== */
+
+    const SUPABASE_URL =
+        "https://koheruqspqwvoaovhxkb.supabase.co";
+
+    const SUPABASE_KEY =
+        "sb_publishable_ER3AShJ0cie9WLYBNHak4g_m3KUTLg7";
+
+    const supabaseClient =
+        supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_KEY
+        );
+
+
+    /* ==========================================
+       ELEMENTS
+    ========================================== */
+
+    const loginTab =
+        document.getElementById("loginTab");
+
+    const signupTab =
+        document.getElementById("signupTab");
+
+    const loginForm =
+        document.getElementById("loginForm");
+
+    const signupForm =
+        document.getElementById("signupForm");
+
+    const message =
+        document.getElementById("message");
+
+
+    /* ==========================================
+       TAB SWITCHING
+    ========================================== */
+
+    loginTab.addEventListener("click", () => {
+
+        loginTab.classList.add("active");
+        signupTab.classList.remove("active");
+
+        loginForm.classList.add("active");
+        signupForm.classList.remove("active");
+
+        clearMessage();
+    });
+
+
+    signupTab.addEventListener("click", () => {
+
+        signupTab.classList.add("active");
+        loginTab.classList.remove("active");
+
+        signupForm.classList.add("active");
+        loginForm.classList.remove("active");
+
+        clearMessage();
+    });
+
+
+    /* ==========================================
+       MESSAGE SYSTEM
+    ========================================== */
+
+    function showMessage(text, type) {
+
+        message.textContent = text;
+
+        message.className =
+            "message " + type;
+    }
+
+
+    function clearMessage() {
+
+        message.textContent = "";
+
+        message.className = "message";
+    }
+
+
+    /* ==========================================
+       PASSWORD VISIBILITY
+    ========================================== */
+
+    function togglePassword(inputId, button) {
+
+        const input =
+            document.getElementById(inputId);
+
+        if (input.type === "password") {
+
+            input.type = "text";
+
+            button.textContent = "🙈";
+
+        } else {
+
+            input.type = "password";
+
+            button.textContent = "👁";
+        }
+    }
+
+
+    /* ==========================================
+       LOGIN
+    ========================================== */
+
+    loginForm.addEventListener("submit", async (event) => {
+
+        event.preventDefault();
+
+        clearMessage();
+
+        const email =
+            document.getElementById("loginEmail")
+            .value
+            .trim();
+
+        const password =
+            document.getElementById("loginPassword")
+            .value;
+
+        const button =
+            document.getElementById("loginBtn");
+
+        button.disabled = true;
+        button.textContent = "Logging in...";
+
+        try {
+
+            const { data, error } =
+                await supabaseClient.auth.signInWithPassword({
+                    email: email,
+                    password: password
+                });
+
+            if (error) {
+                throw error;
+            }
+
+            showMessage(
+                "Login successful. Welcome to Knowledge Point EduHub!",
+                "success"
+            );
+
+            setTimeout(() => {
+                window.location.href = "index.html";
+            }, 900);
+
+        } catch (error) {
+
+            console.error("Login error:", error);
+
+            showMessage(
+                getFriendlyError(error),
+                "error"
+            );
+
+            button.disabled = false;
+            button.textContent = "Login to EduHub";
+        }
+    });
+
+
+    /* ==========================================
+       SIGN UP
+    ========================================== */
+
+    signupForm.addEventListener("submit", async (event) => {
+
+        event.preventDefault();
+
+        clearMessage();
+
+        const name =
+            document.getElementById("signupName")
+            .value
+            .trim();
+
+        const email =
+            document.getElementById("signupEmail")
+            .value
+            .trim();
+
+        const password =
+            document.getElementById("signupPassword")
+            .value;
+
+        const confirmPassword =
+            document.getElementById("confirmPassword")
+            .value;
+
+        const button =
+            document.getElementById("signupBtn");
+
+
+        /* PASSWORD CHECK */
+
+        if (password !== confirmPassword) {
+
+            showMessage(
+                "Passwords do not match.",
+                "error"
+            );
+
+            return;
+        }
+
+
+        if (password.length < 6) {
+
+            showMessage(
+                "Password must contain at least 6 characters.",
+                "error"
+            );
+
+            return;
+        }
+
+
+        button.disabled = true;
+        button.textContent = "Creating Account...";
+
+
+        try {
+
+            const { data, error } =
+                await supabaseClient.auth.signUp({
+
+                    email: email,
+
+                    password: password,
+
+                    options: {
+                        data: {
+                            full_name: name
+                        }
+                    }
+                });
+
+
+            if (error) {
+                throw error;
+            }
+
+
+            /*
+                If email confirmation is enabled,
+                Supabase will send a confirmation email.
+            */
+
+            if (
+                data.user &&
+                !data.session
+            ) {
+
+                showMessage(
+                    "Account created! Please check your email to confirm your account.",
+                    "success"
+                );
+
+            } else {
+
+                showMessage(
+                    "Account created successfully! Redirecting...",
+                    "success"
+                );
+
+                setTimeout(() => {
+                    window.location.href = "index.html";
+                }, 1200);
+            }
+
+
+            signupForm.reset();
+
+        } catch (error) {
+
+            console.error("Signup error:", error);
+
+            showMessage(
+                getFriendlyError(error),
+                "error"
+            );
+
+        } finally {
+
+            button.disabled = false;
+            button.textContent = "Create My Account";
+        }
+
+    });
+
+
+    /* ==========================================
+       FORGOT PASSWORD
+    ========================================== */
+
+    async function forgotPassword() {
+
+        const email =
+            document.getElementById("loginEmail")
+            .value
+            .trim();
+
+
+        if (!email) {
+
+            showMessage(
+                "Enter your email address first.",
+                "error"
+            );
+
+            return;
+        }
+
+
+        try {
+
+            const { error } =
+                await supabaseClient.auth.resetPasswordForEmail(
+                    email,
+                    {
+                        redirectTo:
+                            window.location.origin +
+                            window.location.pathname
+                    }
+                );
+
+
+            if (error) {
+                throw error;
+            }
+
+
+            showMessage(
+                "If an account exists for this email, a password reset link has been sent.",
+                "success"
+            );
+
+        } catch (error) {
+
+            console.error(
+                "Password reset error:",
+                error
+            );
+
+            showMessage(
+                getFriendlyError(error),
+                "error"
+            );
+        }
+    }
+
+
+    /* ==========================================
+       FRIENDLY ERROR MESSAGES
+    ========================================== */
+
+    function getFriendlyError(error) {
+
+        const msg =
+            (error.message || "")
+            .toLowerCase();
+
+
+        if (
+            msg.includes("invalid login credentials")
+        ) {
+            return "Incorrect email or password.";
+        }
+
+
+        if (
+            msg.includes("user already registered")
+        ) {
+            return "An account with this email already exists. Please login instead.";
+        }
+
+
+        if (
+            msg.includes("password")
+            &&
+            msg.includes("6")
+        ) {
+            return "Your password must contain at least 6 characters.";
+        }
+
+
+        if (
+            msg.includes("invalid email")
+        ) {
+            return "Please enter a valid email address.";
+        }
+
+
+        return error.message ||
+            "Something went wrong. Please try again.";
+    }
+
+
+    /* ==========================================
+       CHECK EXISTING SESSION
+    ========================================== */
+
+    async function checkExistingSession() {
+
+        const {
+            data: { session }
+        } = await supabaseClient.auth.getSession();
+
+
+        /*
+            We don't automatically redirect here.
+            This allows users to access the login page
+            intentionally.
+        */
+
+        if (session) {
+
+            console.log(
+                "User is already logged in:",
+                session.user.email
+            );
+        }
+    }
+
+
+    checkExistingSession();
+
+</script>
+
+</body>
+</html>

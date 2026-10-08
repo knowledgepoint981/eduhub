@@ -1,13 +1,21 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Knowledge Point EduHub — Admin Dashboard</title>
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Knowledge Point EduHub — Admin Dashboard
+    </title>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 
     <style>
 
@@ -17,18 +25,23 @@
         ========================================================= */
 
         :root {
+
             --black: #07110d;
             --black-soft: #0d1914;
+
             --emerald-dark: #063d2b;
             --emerald: #087f5b;
             --emerald-light: #10a875;
+
             --gold: #d4af37;
             --gold-light: #f0d477;
 
             --bg: #f3f6f4;
             --card: #ffffff;
+
             --text: #17231e;
             --muted: #64736c;
+
             --border: #dfe8e3;
 
             --danger: #dc2626;
@@ -45,9 +58,12 @@
         ========================================================= */
 
         * {
+
             box-sizing: border-box;
+
             margin: 0;
             padding: 0;
+
             font-family:
                 Inter,
                 "Segoe UI",
@@ -57,6 +73,7 @@
 
 
         body {
+
             background:
                 radial-gradient(
                     circle at top right,
@@ -66,6 +83,7 @@
                 var(--bg);
 
             color: var(--text);
+
             min-height: 100vh;
         }
 
@@ -75,7 +93,9 @@
         ========================================================= */
 
         header {
+
             position: relative;
+
             overflow: hidden;
 
             background:
@@ -92,6 +112,7 @@
                 );
 
             color: white;
+
             padding: 34px 25px;
 
             text-align: center;
@@ -105,7 +126,9 @@
 
 
         header::before {
+
             content: "";
+
             position: absolute;
 
             width: 220px;
@@ -122,7 +145,9 @@
 
 
         header::after {
+
             content: "";
+
             position: absolute;
 
             width: 150px;
@@ -138,7 +163,12 @@
         }
 
 
+        /* =========================================================
+           HEADER LOGO
+        ========================================================= */
+
         .brand-logo {
+
             width: 70px;
             height: 70px;
 
@@ -147,6 +177,7 @@
             border-radius: 50%;
 
             display: flex;
+
             align-items: center;
             justify-content: center;
 
@@ -157,11 +188,6 @@
                     #a98516
                 );
 
-            color: var(--black);
-
-            font-size: 31px;
-            font-weight: 900;
-
             border:
                 3px solid rgba(255,255,255,0.9);
 
@@ -170,15 +196,35 @@
                 0 8px 25px rgba(0,0,0,0.25);
 
             position: relative;
+
             z-index: 2;
+
+            overflow: hidden;
+        }
+
+
+        .brand-logo img {
+
+            width: 100%;
+            height: 100%;
+
+            object-fit: cover;
+
+            border-radius: 50%;
+
+            display: block;
         }
 
 
         header h1 {
+
             position: relative;
+
             z-index: 2;
 
-            font-size: clamp(25px, 4vw, 38px);
+            font-size:
+                clamp(25px, 4vw, 38px);
+
             font-weight: 800;
 
             letter-spacing: 0.3px;
@@ -188,27 +234,34 @@
 
 
         header h1 span {
+
             color: var(--gold-light);
         }
 
 
         header p {
+
             position: relative;
+
             z-index: 2;
 
-            color: rgba(255,255,255,0.82);
+            color:
+                rgba(255,255,255,0.82);
 
             font-size: 14px;
+
             letter-spacing: 0.8px;
         }
 
 
         .tagline {
+
             margin-top: 8px;
 
             color: var(--gold-light);
 
             font-size: 12px;
+
             font-weight: 700;
 
             letter-spacing: 1.6px;
@@ -222,6 +275,7 @@
         ========================================================= */
 
         .container {
+
             max-width: 1600px;
 
             margin: 30px auto;
@@ -235,6 +289,7 @@
         ========================================================= */
 
         .card {
+
             background: var(--card);
 
             border-radius: 18px;
@@ -253,6 +308,7 @@
         ========================================================= */
 
         #loginSection {
+
             max-width: 460px;
 
             margin:
@@ -261,12 +317,15 @@
 
 
         .login-card {
+
             position: relative;
+
             overflow: hidden;
         }
 
 
         .login-card::before {
+
             content: "";
 
             position: absolute;
@@ -288,6 +347,7 @@
 
 
         .login-brand {
+
             text-align: center;
 
             margin-bottom: 25px;
@@ -295,6 +355,7 @@
 
 
         .login-logo {
+
             width: 74px;
             height: 74px;
 
@@ -303,6 +364,7 @@
             border-radius: 50%;
 
             display: flex;
+
             align-items: center;
             justify-content: center;
 
@@ -316,17 +378,28 @@
             border:
                 3px solid var(--gold);
 
-            color: var(--gold);
-
-            font-size: 32px;
-            font-weight: 900;
-
             box-shadow:
                 0 8px 25px rgba(4,61,43,0.18);
+
+            overflow: hidden;
+        }
+
+
+        .login-logo img {
+
+            width: 100%;
+            height: 100%;
+
+            object-fit: cover;
+
+            border-radius: 50%;
+
+            display: block;
         }
 
 
         .login-brand h2 {
+
             color: var(--emerald-dark);
 
             font-size: 23px;
@@ -336,6 +409,7 @@
 
 
         .login-brand p {
+
             color: var(--muted);
 
             font-size: 13px;
@@ -343,6 +417,7 @@
 
 
         label {
+
             display: block;
 
             font-weight: 700;
@@ -356,6 +431,7 @@
         input,
         select,
         textarea {
+
             width: 100%;
 
             padding: 12px 13px;
@@ -386,6 +462,7 @@
         input:focus,
         select:focus,
         textarea:focus {
+
             border-color: var(--emerald);
 
             background: white;
@@ -397,12 +474,15 @@
 
 
         textarea {
+
             resize: vertical;
+
             min-height: 75px;
         }
 
 
         button {
+
             border: none;
 
             border-radius: 9px;
@@ -423,6 +503,7 @@
 
 
         button:hover {
+
             transform: translateY(-1px);
         }
 
@@ -432,6 +513,7 @@
         ========================================================= */
 
         .login-btn {
+
             width: 100%;
 
             background:
@@ -452,6 +534,7 @@
 
 
         .login-btn:hover {
+
             background:
                 linear-gradient(
                     135deg,
@@ -466,6 +549,7 @@
         ========================================================= */
 
         .message {
+
             margin-top: 15px;
 
             padding: 12px;
@@ -481,13 +565,17 @@
 
 
         .error {
+
             background: #fee2e2;
+
             color: #991b1b;
         }
 
 
         .success {
+
             background: #dcfce7;
+
             color: #166534;
         }
 
@@ -497,11 +585,13 @@
         ========================================================= */
 
         #dashboardSection {
+
             display: none;
         }
 
 
         .dashboard-top {
+
             display: flex;
 
             justify-content: space-between;
@@ -522,6 +612,7 @@
 
 
         .dashboard-top h2 {
+
             color: var(--emerald-dark);
 
             font-size: 25px;
@@ -531,6 +622,7 @@
 
 
         .dashboard-top p {
+
             color: var(--muted);
 
             font-size: 13px;
@@ -538,6 +630,7 @@
 
 
         .dashboard-title {
+
             display: flex;
 
             align-items: center;
@@ -546,7 +639,12 @@
         }
 
 
+        /* =========================================================
+           DASHBOARD LOGO
+        ========================================================= */
+
         .title-mark {
+
             width: 42px;
             height: 42px;
 
@@ -571,6 +669,21 @@
             box-shadow:
                 0 5px 15px
                 rgba(6,61,43,0.15);
+
+            overflow: hidden;
+        }
+
+
+        .title-mark img {
+
+            width: 100%;
+            height: 100%;
+
+            object-fit: cover;
+
+            border-radius: 11px;
+
+            display: block;
         }
 
 
@@ -579,6 +692,7 @@
         ========================================================= */
 
         .logout-btn {
+
             background:
                 #fff1f2;
 
@@ -591,6 +705,7 @@
 
 
         .logout-btn:hover {
+
             background:
                 #fee2e2;
         }
@@ -601,10 +716,11 @@
         ========================================================= */
 
         .stats {
+
             display: grid;
 
             grid-template-columns:
-                repeat(4, 1fr);
+                repeat(5, 1fr);
 
             gap: 15px;
 
@@ -613,6 +729,7 @@
 
 
         .stat-box {
+
             position: relative;
 
             overflow: hidden;
@@ -642,6 +759,7 @@
 
 
         .stat-box::after {
+
             content: "";
 
             position: absolute;
@@ -661,6 +779,7 @@
 
 
         .stat-box strong {
+
             display: block;
 
             font-size: 28px;
@@ -674,10 +793,35 @@
 
 
         /* =========================================================
+           FOLLOWER STAT
+        ========================================================= */
+
+        .follower-stat {
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #fffaf0,
+                    #f8f0d9
+                );
+
+            border-color:
+                rgba(212,175,55,0.35);
+        }
+
+
+        .follower-stat strong {
+
+            color: #9a7712;
+        }
+
+
+        /* =========================================================
            CONTROLS
         ========================================================= */
 
         .controls {
+
             display: grid;
 
             grid-template-columns:
@@ -691,6 +835,7 @@
 
         .controls input,
         .controls select {
+
             margin: 0;
 
             background: #f9fcfa;
@@ -702,6 +847,7 @@
         ========================================================= */
 
         .table-wrapper {
+
             overflow-x: auto;
 
             border:
@@ -712,6 +858,7 @@
 
 
         table {
+
             width: 100%;
 
             border-collapse: collapse;
@@ -723,6 +870,7 @@
 
 
         th {
+
             background:
                 linear-gradient(
                     135deg,
@@ -748,6 +896,7 @@
 
 
         td {
+
             padding: 12px;
 
             border-bottom:
@@ -762,12 +911,14 @@
 
 
         tr:hover {
+
             background:
                 #f7fbf9;
         }
 
 
         tr:last-child td {
+
             border-bottom: none;
         }
 
@@ -777,6 +928,7 @@
         ========================================================= */
 
         .request-code {
+
             display: inline-block;
 
             background:
@@ -805,6 +957,7 @@
         ========================================================= */
 
         .status-select {
+
             width: 145px;
 
             margin:
@@ -819,22 +972,31 @@
 
 
         .status-select.pending {
+
             background: #fff8e1;
+
             color: #8a5b00;
+
             border-color: #f3df9a;
         }
 
 
         .status-select.progress {
+
             background: #e8f5ef;
+
             color: #075c40;
+
             border-color: #b9dfcf;
         }
 
 
         .status-select.completed {
+
             background: #e8f7ed;
+
             color: #166534;
+
             border-color: #bce5c8;
         }
 
@@ -844,6 +1006,7 @@
         ========================================================= */
 
         .admin-message-input {
+
             width: 230px;
 
             min-height: 75px;
@@ -854,6 +1017,7 @@
 
 
         .material-link-input {
+
             width: 230px;
 
             margin:
@@ -862,6 +1026,7 @@
 
 
         .admin-controls-title {
+
             font-size: 11px;
 
             font-weight: 800;
@@ -877,6 +1042,7 @@
 
 
         .save-status-btn {
+
             background:
                 linear-gradient(
                     135deg,
@@ -899,6 +1065,7 @@
 
 
         .save-status-btn:hover {
+
             background:
                 linear-gradient(
                     135deg,
@@ -909,6 +1076,7 @@
 
 
         .save-status-btn:disabled {
+
             opacity: 0.6;
 
             cursor: not-allowed;
@@ -922,6 +1090,7 @@
         ========================================================= */
 
         .existing-link {
+
             display: block;
 
             font-size: 12px;
@@ -939,6 +1108,7 @@
 
 
         .existing-link:hover {
+
             color: var(--gold);
 
             text-decoration: underline;
@@ -950,6 +1120,7 @@
         ========================================================= */
 
         .empty {
+
             text-align: center;
 
             padding: 50px;
@@ -965,6 +1136,7 @@
         ========================================================= */
 
         footer {
+
             text-align: center;
 
             padding: 35px 20px;
@@ -976,11 +1148,13 @@
 
 
         footer strong {
+
             color: var(--emerald-dark);
         }
 
 
         .footer-gold {
+
             color: var(--gold);
         }
 
@@ -989,9 +1163,21 @@
            RESPONSIVE
         ========================================================= */
 
+        @media (max-width: 1200px) {
+
+            .stats {
+
+                grid-template-columns:
+                    repeat(3, 1fr);
+            }
+
+        }
+
+
         @media (max-width: 1000px) {
 
             .stats {
+
                 grid-template-columns:
                     repeat(2, 1fr);
             }
@@ -1002,31 +1188,38 @@
         @media (max-width: 800px) {
 
             header {
+
                 padding: 28px 18px;
             }
 
 
             .controls {
+
                 grid-template-columns: 1fr;
             }
 
 
             .stats {
-                grid-template-columns: 1fr 1fr;
+
+                grid-template-columns:
+                    1fr 1fr;
             }
 
 
             .container {
+
                 padding: 0 10px;
             }
 
 
             .card {
+
                 padding: 20px;
             }
 
 
             .dashboard-top {
+
                 align-items: flex-start;
             }
 
@@ -1036,22 +1229,26 @@
         @media (max-width: 520px) {
 
             .stats {
+
                 grid-template-columns: 1fr;
             }
 
 
             header h1 {
+
                 font-size: 25px;
             }
 
 
             .dashboard-top h2 {
+
                 font-size: 21px;
             }
 
         }
 
     </style>
+
 </head>
 
 
@@ -1065,16 +1262,24 @@
 <header>
 
     <div class="brand-logo">
-        🦅
+
+        <img
+            src="logo.png"
+            alt="Knowledge Point EduHub Logo"
+        >
+
     </div>
+
 
     <h1>
         Knowledge Point <span>EduHub</span>
     </h1>
 
+
     <p>
         Admin Dashboard • Student Material Management
     </p>
+
 
     <div class="tagline">
         Where Knowledge Meets Excellence
@@ -1088,19 +1293,29 @@
      LOGIN
 ========================================================= -->
 
-<div class="container" id="loginSection">
+<div
+    class="container"
+    id="loginSection"
+>
 
     <div class="card login-card">
 
         <div class="login-brand">
 
             <div class="login-logo">
-                🦅
+
+                <img
+                    src="logo.png"
+                    alt="Knowledge Point EduHub Logo"
+                >
+
             </div>
+
 
             <h2>
                 Admin Login
             </h2>
+
 
             <p>
                 Knowledge Point EduHub Administration
@@ -1115,6 +1330,7 @@
                 Admin Email
             </label>
 
+
             <input
                 type="email"
                 id="email"
@@ -1126,6 +1342,7 @@
             <label for="password">
                 Password
             </label>
+
 
             <input
                 type="password"
@@ -1175,8 +1392,14 @@
             <div class="dashboard-title">
 
                 <div class="title-mark">
-                    🦅
+
+                    <img
+                        src="logo.png"
+                        alt="Knowledge Point EduHub Logo"
+                    >
+
                 </div>
+
 
                 <div>
 
@@ -1184,8 +1407,10 @@
                         Student Requests
                     </h2>
 
+
                     <p>
-                        Manage requests submitted through Knowledge Point EduHub.
+                        Manage requests submitted through
+                        Knowledge Point EduHub.
                     </p>
 
                 </div>
@@ -1251,6 +1476,17 @@
                 </strong>
 
                 Completed
+
+            </div>
+
+
+            <div class="stat-box follower-stat">
+
+                <strong id="followerCount">
+                    0
+                </strong>
+
+                EduHub Followers
 
             </div>
 
@@ -1449,8 +1685,10 @@
     const SUPABASE_URL =
         "https://koheruqspqwvoaovhxkb.supabase.co";
 
+
     const SUPABASE_KEY =
         "sb_publishable_ER3AShJ0cie9WLYBNHak4g_m3KUTLg7";
+
 
     const ADMIN_UID =
         "4938b3aa-8b3e-4dc9-82f9-be3a72fb207a";
@@ -1473,64 +1711,82 @@
             "loginSection"
         );
 
+
     const dashboardSection =
         document.getElementById(
             "dashboardSection"
         );
+
 
     const loginForm =
         document.getElementById(
             "loginForm"
         );
 
+
     const loginMessage =
         document.getElementById(
             "loginMessage"
         );
+
 
     const logoutBtn =
         document.getElementById(
             "logoutBtn"
         );
 
+
     const tableBody =
         document.getElementById(
             "requestsTableBody"
         );
+
 
     const searchInput =
         document.getElementById(
             "searchInput"
         );
 
+
     const classFilter =
         document.getElementById(
             "classFilter"
         );
+
 
     const subjectFilter =
         document.getElementById(
             "subjectFilter"
         );
 
+
     const totalRequests =
         document.getElementById(
             "totalRequests"
         );
+
 
     const pendingRequests =
         document.getElementById(
             "pendingRequests"
         );
 
+
     const progressRequests =
         document.getElementById(
             "progressRequests"
         );
 
+
     const completedRequests =
         document.getElementById(
             "completedRequests"
+        );
+
+
+    const followerCount =
+        document.getElementById(
+            "followerCount"
         );
 
 
@@ -1550,8 +1806,10 @@
         loginMessage.textContent =
             message;
 
+
         loginMessage.className =
             "message " + type;
+
 
         loginMessage.style.display =
             "block";
@@ -1608,6 +1866,51 @@
 
 
     /* =========================================================
+       LOAD FOLLOWER COUNT
+    ========================================================= */
+
+    async function loadFollowerCount() {
+
+        followerCount.textContent =
+            "...";
+
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient.rpc(
+                "get_follower_count"
+            );
+
+
+        if (error) {
+
+            console.error(
+                "Follower count error:",
+                error
+            );
+
+
+            followerCount.textContent =
+                "—";
+
+
+            return;
+
+        }
+
+
+        followerCount.textContent =
+            Number(
+                data ?? 0
+            ).toLocaleString();
+
+    }
+
+
+
+    /* =========================================================
        SHOW DASHBOARD
     ========================================================= */
 
@@ -1616,10 +1919,15 @@
         loginSection.style.display =
             "none";
 
+
         dashboardSection.style.display =
             "block";
 
+
         loadRequests();
+
+
+        loadFollowerCount();
 
     }
 
@@ -1735,12 +2043,14 @@
 
         tableBody.innerHTML =
             `<tr>
+
                 <td
                     colspan="9"
                     class="empty"
                 >
                     Loading requests...
                 </td>
+
             </tr>`;
 
 
@@ -1795,6 +2105,7 @@
 
 
         updateStatistics();
+
 
         renderRequests();
 
@@ -2592,6 +2903,7 @@
 
 </script>
 
+
 </body>
+
 </html>
-```
