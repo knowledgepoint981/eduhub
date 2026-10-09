@@ -905,14 +905,13 @@
         try {
 
             const { error } =
-                await supabaseClient.auth.resetPasswordForEmail(
-                    email,
-                    {
-                        redirectTo:
-                            window.location.origin +
-                            window.location.pathname
-                    }
-                );
+    await supabaseClient.auth.resetPasswordForEmail(
+        email,
+        {
+            redirectTo:
+                "https://knowledgepoint981.github.io/eduhub/reset-password.html"
+        }
+    );
 
 
             if (error) {
